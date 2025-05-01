@@ -8,8 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="client" />
         <module name="server" />
-        <module name="shared" />
+        <module name="general" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="generalC" target="17" />
+      <module name="shared" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
