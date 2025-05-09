@@ -1,4 +1,4 @@
-package ru.itmo.ki40lf.model;
+package ru.itmo.ki40lf.resources;
 
 /**
  * Класс энамов типов
