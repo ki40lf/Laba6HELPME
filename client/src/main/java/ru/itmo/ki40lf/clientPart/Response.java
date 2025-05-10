@@ -1,9 +1,9 @@
 package ru.itmo.ki40lf.clientPart;
 
-public class CommandResponse {
+public class Response {
     private final String message;
 
-    public CommandResponse(String message) {
+    public Response(String message) {
         this.message = message;
     }
 
