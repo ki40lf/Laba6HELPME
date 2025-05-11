@@ -1,6 +1,8 @@
 package ru.itmo.ki40lf.clientPart;
 
-public class Response {
+import java.io.Serializable;
+
+public class Response implements Serializable {
     private final String message;
 
     public Response(String message) {
