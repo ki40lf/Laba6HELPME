@@ -20,11 +20,11 @@ public class ShowCommand extends Command {
         }
         StringBuilder text = new StringBuilder();
         if (request.getMessage().split(" ").length == 1) {
-            text.append(dragons.entrySet().stream()
-                    .map(entry -> entry.getKey() + ": " + entry.getValue())
+            text.append(dragons.stream()
+                    .map(Dragon::toString)
                     .collect(Collectors.joining("\n")));
         }
-        return "";
+        return text.toString();
     }
 
     @Override
