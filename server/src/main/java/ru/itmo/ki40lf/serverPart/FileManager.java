@@ -19,7 +19,7 @@ public class FileManager {
 
     // Чтение из CSV файла
     public List<Dragon> readFromCSV() {
-        List<Dragon> dragons = new ArrayList<>();
+        List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
@@ -42,7 +42,7 @@ public class FileManager {
                 dragons.add(dragon);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("ZALUPA" + e.getMessage());
         }
         return dragons;
     }
@@ -66,7 +66,7 @@ public class FileManager {
                 writer.writeNext(record);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("ZALUPAWRITE" + e.getMessage());
         }
     }
 }

@@ -9,11 +9,6 @@ public class CollectionManager {
     private List<Dragon> dragons = new ArrayList<>();
     private ZonedDateTime initializationTime;
 
-    public CollectionManager(List<Dragon> initial) {
-        this.dragons = new ArrayList<>(initial);
-        this.initializationTime = ZonedDateTime.now();
-    }
-
     public CollectionManager() {
         this.initializationTime = ZonedDateTime.now();
     }
