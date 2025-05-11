@@ -22,7 +22,7 @@ public class InfoCommand extends Command {
                 "Тип коллекции: " + dragons.getClass().getSimpleName() + "\n" +
                 "Дата инициализации: " + ServerEnvironment.getInstance().getCollectionManager().getInitializationTime() + "\n" +
                 "Количество элементов: " + dragons.size() + "\n";
-        return "";
+        return info;
     }
 
     @Override
