@@ -1,6 +1,6 @@
 package ru.itmo.ki40lf.commands;
 
-import ru.itmo.ki40lf.clientPart.Request;
+import ru.itmo.ki40lf.serverPart.Request;
 import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 
 public class ClearCommand extends Command {

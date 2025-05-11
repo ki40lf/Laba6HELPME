@@ -1,6 +1,5 @@
 package ru.itmo.ki40lf.serverPart;
 
-import ru.itmo.ki40lf.clientPart.Request;
 import ru.itmo.ki40lf.commands.Command;
 
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package ru.itmo.ki40lf.commands;
 
-import ru.itmo.ki40lf.clientPart.Request;
+import ru.itmo.ki40lf.serverPart.Request;
 
 public class InfoCommand extends Command {
 
