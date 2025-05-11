@@ -11,6 +11,7 @@ public class CollectionManager {
 
     public CollectionManager(List<Dragon> initial) {
         this.dragons = new ArrayList<>(initial);
+        this.initializationTime = ZonedDateTime.now();
     }
 
     public CollectionManager() {
@@ -27,11 +28,6 @@ public class CollectionManager {
         StringBuilder sb = new StringBuilder();
         for (Dragon d : dragons) sb.append(d).append("\n");
         return sb.toString();
-    }
-
-    public String clear() {
-        dragons.clear();
-        return "Collection cleared.";
     }
 
     public List<Dragon> getAll() {

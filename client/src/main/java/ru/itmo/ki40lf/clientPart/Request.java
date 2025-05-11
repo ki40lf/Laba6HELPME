@@ -1,28 +1,30 @@
 package ru.itmo.ki40lf.clientPart;
 
+import ru.itmo.ki40lf.resources.Dragon;
+
 import java.io.Serializable;
 
 
 public class Request implements Serializable {
-    private final String commandName;
+    private final String message;
     private final String[] args;
-    private final Object objArg; //если команда требует объект из коллекции
+    private final Dragon dragon; //если команда требует объект из коллекции
 
-    public Request(String commandName, String[] args, Object objArg) {
-        this.commandName = commandName;
+    public Request(String message, String[] args, Dragon dragon) {
+        this.message = message;
         this.args = args;
-        this.objArg = objArg;
+        this.dragon = dragon;
     }
 
-    public String getCommandName() {
-        return commandName;
+    public String getMessage() {
+        return message;
     }
 
     public String[] getArgs() {
         return args;
     }
 
-    public Object getObjArg() {
-        return objArg;
+    public Dragon getDragon() {
+        return dragon;
     }
 }

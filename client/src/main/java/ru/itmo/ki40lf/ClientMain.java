@@ -3,7 +3,6 @@ package ru.itmo.ki40lf;
 import ru.itmo.ki40lf.clientPart.*;
 
 import java.io.*;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientMain {
@@ -26,7 +25,7 @@ public class ClientMain {
                 Response response = responder.read();
                 responder.print(response);
 
-                if ("exit".equalsIgnoreCase(request.getCommandName())) {
+                if ("exit".equalsIgnoreCase(request.getMessage())) {
                     break;
                 }
             }

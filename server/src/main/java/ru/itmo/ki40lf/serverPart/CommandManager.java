@@ -11,6 +11,8 @@ public class CommandManager {
     public CommandManager() {
         commandList = new HashMap<>();
 
+        //commandList.put("clear", new Clear());
+
     }
 
     public HashMap<String, Command> getCommandList() {
@@ -18,7 +20,7 @@ public class CommandManager {
     }
 
     public String startExecuting(Request request) {
-        String commandName = request.getCommandName().split(" ")[0];
+        String commandName = request.getMessage();
         if (commandList.containsKey(commandName)) {
             Command command = commandList.get(commandName);
             String message = command.execute(request);

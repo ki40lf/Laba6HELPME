@@ -22,10 +22,10 @@ public class Server {
                      ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
 
                     Request request = (Request) in.readObject();
-                    System.out.println("Получена команда: " + request.getCommandName());
+                    System.out.println("Получена команда: " + request.getMessage());
 
                     // Простая заглушка
-                    Response response = new Response("Сервер получил команду: " + request.getCommandName(), true);
+                    Response response = new Response("Сервер получил команду: " + request.getMessage());
                     out.writeObject(response);
                 } catch (ClassNotFoundException e) {
                     System.err.println("Ошибка при чтении запроса: " + e.getMessage());
