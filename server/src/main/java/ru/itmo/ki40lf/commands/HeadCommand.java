@@ -6,10 +6,9 @@ import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 
 import java.util.List;
 
-public class InfoCommand extends Command {
-
-    public InfoCommand() {
-        super("info");
+public class HeadCommand extends Command {
+    public HeadCommand() {
+        super("head");
     }
 
     @Override
@@ -18,15 +17,12 @@ public class InfoCommand extends Command {
         if (dragons.isEmpty()) {
             return "Коллекция пуста! Попробуйте другую команду";
         }
-        String info = "Информация о коллекции:\n" +
-                "Тип коллекции: " + dragons.getClass().getSimpleName() + "\n" +
-                "Дата инициализации: " + ServerEnvironment.getInstance().getCollectionManager().getInitializationTime() + "\n" +
-                "Количество элементов: " + dragons.size() + "\n";
-        return info;
+        String result ="Первый элемент коллекции: " + dragons.get(0).toString();
+        return result;
     }
 
     @Override
     public String getHelp() {
-        return "Info about collection";
+        return "bring the first element of the dragon collection";
     }
 }

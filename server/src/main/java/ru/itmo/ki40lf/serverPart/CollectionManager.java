@@ -37,4 +37,8 @@ public class CollectionManager {
     public List<Dragon> getDragons() {
         return dragons;
     }
+
+    public ZonedDateTime getInitializationTime() {
+        return initializationTime;
+    }
 }
