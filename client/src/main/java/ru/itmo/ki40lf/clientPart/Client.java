@@ -4,10 +4,9 @@ import ru.itmo.ki40lf.resources.Coordinates;
 import ru.itmo.ki40lf.resources.Dragon;
 import ru.itmo.ki40lf.resources.FormDragons;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
@@ -61,21 +60,19 @@ public class Client {
                 }
 
                 request = new Request(input, arguments, dragon);
-                String csvRequest = serializeRequestToCSV(request) + "\n";
+                try (Socket socket = new Socket("localhost", 12345);
+                     ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+                     ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
 
+                    // ✅ Отправляем объект Request
+                    outputStream.writeObject(request);
+                    outputStream.flush();
 
-                try (SocketChannel channel = SocketChannel.open()) {
-                    channel.connect(new InetSocketAddress("localhost", 12345));
-                    ByteBuffer buffer = ByteBuffer.wrap(csvRequest.getBytes());
-                    channel.write(buffer);
+                    // ✅ Читаем ответ от сервера
+                    Response response = (Response) inputStream.readObject();
+                    System.out.println("Ответ от сервера: " + response.getMessage());
 
-                    ByteBuffer responseBuffer = ByteBuffer.allocate(8192);
-                    channel.read(responseBuffer);
-                    responseBuffer.flip();
-                    String response = new String(responseBuffer.array()).trim();
-                    System.out.println(response);
-
-                } catch (IOException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     System.out.println("Ошибка подключения к серверу: " + e.getMessage());
                 }
             }
