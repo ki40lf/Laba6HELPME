@@ -53,7 +53,7 @@ public class Server {
                     if (received instanceof Request) {
                         Request request = (Request) received;
 
-                        System.out.println("📝 Получена команда: " + request.getMessage());
+                        System.out.println("Получена команда: " + request.getMessage());
 
                         CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
                         Command command = commandManager.getCommandList().get(request.getMessage());
