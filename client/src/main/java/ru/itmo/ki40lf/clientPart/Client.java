@@ -47,13 +47,13 @@ public class Client {
                     case "add": //переделываю
                         dragon = dragonGenerator.createDragon();
                         break;
-//                    case "execute_script":
-//                        if (arguments.length != 0) {
-//                            ExecuteScript.execute(arguments[0]);
-//                        } else {
-//                            System.out.println("Something wrong with arguments. Write script file name");
-//                        }
-//                        break;
+                    case "execute_script":
+                        if (arguments.length != 0) {
+                            ExecuteScript.executeScript("C/Users/lubst/FilesCommands.csv");
+                        } else {
+                            System.out.println("Something wrong with arguments. Write script file name");
+                        }
+                        break;
                     default:
                         break;
                 }

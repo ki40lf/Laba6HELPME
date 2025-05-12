@@ -1,4 +1,4 @@
 package ru.itmo.ki40lf.serverPart;
 
-public class ResponseWriter {
+public class ResponseWriter{
 }
