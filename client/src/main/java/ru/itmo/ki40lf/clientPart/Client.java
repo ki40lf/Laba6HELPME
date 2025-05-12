@@ -4,6 +4,7 @@ import ru.itmo.ki40lf.common.Response;
 import ru.itmo.ki40lf.resources.Coordinates;
 import ru.itmo.ki40lf.resources.Dragon;
 import ru.itmo.ki40lf.resources.FormDragons;
+import ru.itmo.ki40lf.resources.IdGen;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -40,11 +41,10 @@ public class Client {
                     case "save":
                         System.out.println("Сохранение коллекции не доступно с клиента");
                         break;
-                    case "update_id":
-                        long id = Long.parseLong(arguments[0]); //сделать для айдишника
-                        dragon = dragonGenerator.createDragon(id);
+                    case "update_id": //Сделать, чтобы при проблемах эта штука бэкалась назад
+                        dragon = dragonGenerator.createDragon();
                         break;
-                    case "insert":
+                    case "add": //переделываю
                         dragon = dragonGenerator.createDragon();
                         break;
 //                    case "execute_script":
