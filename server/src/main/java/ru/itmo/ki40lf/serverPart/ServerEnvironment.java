@@ -14,6 +14,7 @@ public class ServerEnvironment {
         return instance;
     }
 
+
     private ServerEnvironment() {}
 
     public CollectionManager getCollectionManager() {

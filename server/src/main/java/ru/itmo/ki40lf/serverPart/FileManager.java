@@ -20,7 +20,7 @@ public class FileManager {
     // Чтение из CSV файла
     public List<Dragon> readFromCSV() {
         List<Dragon> dragons = new ArrayList<>();
-        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+        try (CSVReader reader = new CSVReader(new FileReader("D:/ITMO/dragons.csv"))) {
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 // Предполагается, что порядок колонок соответствует полям Dragon
@@ -38,6 +38,7 @@ public class FileManager {
                                 nextLine[9].equals("null") ? null : Float.parseFloat(nextLine[9])
                         )
 
+
                 );
                 dragons.add(dragon);
             }
@@ -49,7 +50,7 @@ public class FileManager {
 
     // Запись в CSV файл
     public void writeToCSV(List<Dragon> dragons) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(filePath))) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter("D:/ITMO/dragons.csv"))) {
             for (Dragon dragon : dragons) {
                 String[] record = {
                         String.valueOf(dragon.getId()),

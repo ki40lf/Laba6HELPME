@@ -6,15 +6,10 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class CollectionManager {
-    private List<Dragon> dragons = new ArrayList<>();
+    private List<Dragon> dragons = ServerEnvironment.getInstance().getFileManager().readFromCSV();
     private ZonedDateTime initializationTime;
 
-    public CollectionManager(List<Dragon> initial) {
-        this.dragons = new ArrayList<>(initial);
-        this.initializationTime = ZonedDateTime.now();
-    }
-
-    public CollectionManager() {
+    public CollectionManager(List<Dragon> dragons) {
         this.initializationTime = ZonedDateTime.now();
     }
 
