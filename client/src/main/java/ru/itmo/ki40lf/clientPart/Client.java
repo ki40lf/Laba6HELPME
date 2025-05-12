@@ -27,7 +27,8 @@ public class Client {
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
             String[] commandLine = input.trim().split("\\s+");
-            String[] arguments = Arrays.copyOfRange(commandLine, 1, commandLine.length);
+            String[] arguments = new String[commandLine.length - 1];
+            System.arraycopy(commandLine, 1, arguments, 0, arguments.length);
             //System.out.println(arguments.toString());
             String command = commandLine[0];
             Request request = null;
@@ -51,7 +52,7 @@ public class Client {
                         if (arguments.length != 0) {
                             ExecuteScript.executeScript("C/Users/lubst/FilesCommands.csv");
                         } else {
-                            System.out.println("Something wrong with arguments. Write script file name");
+                            System.out.println("Что-то не так с аргументами");
                         }
                         break;
                     default:
