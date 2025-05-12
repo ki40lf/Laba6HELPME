@@ -1,4 +1,6 @@
 package ru.itmo.ki40lf.clientPart;
+import ru.itmo.ki40lf.common.Request;
+import ru.itmo.ki40lf.common.Response;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

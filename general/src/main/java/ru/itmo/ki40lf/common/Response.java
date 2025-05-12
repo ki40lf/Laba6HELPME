@@ -1,4 +1,4 @@
-package ru.itmo.ki40lf.serverPart;
+package ru.itmo.ki40lf.common;
 
 import java.io.Serializable;
 

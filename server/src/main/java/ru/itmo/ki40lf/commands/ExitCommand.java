@@ -1,7 +1,5 @@
 package ru.itmo.ki40lf.commands;
-
-import ru.itmo.ki40lf.serverPart.Request;
-
+import ru.itmo.ki40lf.common.Request;
 public class ExitCommand extends Command {
     public ExitCommand() {
         super("exit");

@@ -1,8 +1,5 @@
 package ru.itmo.ki40lf.commands;
-
-import ru.itmo.ki40lf.serverPart.Request;
-import ru.itmo.ki40lf.serverPart.ServerEnvironment;
-
+import ru.itmo.ki40lf.common.Request;
 public class AddCommand extends Command {
     public AddCommand() {
         super("add");

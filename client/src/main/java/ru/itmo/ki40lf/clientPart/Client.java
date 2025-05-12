@@ -1,5 +1,6 @@
 package ru.itmo.ki40lf.clientPart;
-
+import ru.itmo.ki40lf.common.Request;
+import ru.itmo.ki40lf.common.Response;
 import ru.itmo.ki40lf.resources.Coordinates;
 import ru.itmo.ki40lf.resources.Dragon;
 import ru.itmo.ki40lf.resources.FormDragons;
@@ -9,8 +10,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

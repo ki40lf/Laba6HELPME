@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>ru.itmo.ki40lf</groupId>
-            <artifactId>client</artifactId>
+            <artifactId>general</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

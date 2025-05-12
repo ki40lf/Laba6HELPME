@@ -1,8 +1,7 @@
 package ru.itmo.ki40lf;
-
+import ru.itmo.ki40lf.common.Request;
+import ru.itmo.ki40lf.common.Response;
 import ru.itmo.ki40lf.commands.Command;
-import ru.itmo.ki40lf.serverPart.Request;
-import ru.itmo.ki40lf.serverPart.Response;
 import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 import ru.itmo.ki40lf.serverPart.CollectionManager;
 import ru.itmo.ki40lf.serverPart.CommandManager;
@@ -13,7 +12,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.List;
 
 public class Server {
     private static final int PORT = 12345;
