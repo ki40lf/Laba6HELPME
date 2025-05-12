@@ -22,9 +22,10 @@ public class Server {
     public static void main(String[] args) {
         // ✅ Инициализация ServerEnvironment:
         ServerEnvironment environment = ServerEnvironment.getInstance();
-        environment.setCollectionManager(new CollectionManager(environment.getFileManager().readFromCSV()));
+        environment.setFileManager(new FileManager("dragons.csv"));
+        environment.setCollectionManager(new CollectionManager());
         environment.setCommandManager(new CommandManager());
-        environment.setFileManager(new FileManager("dragons.csv"));;
+
 
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {

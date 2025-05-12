@@ -21,7 +21,9 @@ public class FileManager {
     public List<Dragon> readFromCSV() {
         List<Dragon> dragons = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader("D:/ITMO/dragons.csv"))) {
+
             String[] nextLine;
+            reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
                 // Предполагается, что порядок колонок соответствует полям Dragon
                 Dragon dragon = new Dragon(
@@ -32,10 +34,10 @@ public class FileManager {
                         Long.parseLong(nextLine[5]),
                         Color.valueOf(nextLine[6]),
                         DragonType.valueOf(nextLine[7]),
-                        DragonCharacter.valueOf(nextLine[10]),
+                        DragonCharacter.valueOf(nextLine[8]),
                         new DragonCave(
-                                Double.parseDouble(nextLine[8]),    // Depth
-                                nextLine[9].equals("null") ? null : Float.parseFloat(nextLine[9])
+                                Double.parseDouble(nextLine[9]),    // Depth
+                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[9])
                         )
 
 

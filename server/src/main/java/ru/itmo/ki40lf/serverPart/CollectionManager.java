@@ -9,7 +9,7 @@ public class CollectionManager {
     private List<Dragon> dragons = ServerEnvironment.getInstance().getFileManager().readFromCSV();
     private ZonedDateTime initializationTime;
 
-    public CollectionManager(List<Dragon> dragons) {
+    public CollectionManager() {
         this.initializationTime = ZonedDateTime.now();
     }
 
