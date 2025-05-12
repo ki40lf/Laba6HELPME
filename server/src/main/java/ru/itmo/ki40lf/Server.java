@@ -1,11 +1,11 @@
 package ru.itmo.ki40lf;
+
 import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.common.Response;
-import ru.itmo.ki40lf.commands.Command;
-import ru.itmo.ki40lf.serverPart.ServerEnvironment;
-import ru.itmo.ki40lf.serverPart.CollectionManager;
 import ru.itmo.ki40lf.serverPart.CommandManager;
+import ru.itmo.ki40lf.serverPart.CollectionManager;
 import ru.itmo.ki40lf.serverPart.FileManager;
+import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -20,11 +20,9 @@ public class Server {
     public static void main(String[] args) {
         // ✅ Инициализация ServerEnvironment:
         ServerEnvironment environment = ServerEnvironment.getInstance();
-        environment.setFileManager(new FileManager("dragons.csv"));
-        environment.setCollectionManager(new CollectionManager());
+        environment.setFileManager(new FileManager("D:/ITMO/dragons.csv"));
+        environment.setCollectionManager(new CollectionManager(environment.getFileManager().readFromCSV()));
         environment.setCommandManager(new CommandManager());
-
-
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("🔥 Сервер запущен на порту " + PORT);
@@ -41,6 +39,9 @@ public class Server {
         }
     }
 
+    /**
+     * Метод обработки подключения клиента
+     */
     private static void handleClient(Socket clientSocket) {
         try (
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -50,32 +51,18 @@ public class Server {
 
             while (true) {
                 try {
+                    // ✅ Читаем объект из потока
                     Object received = in.readObject();
+
                     if (received instanceof Request) {
                         Request request = (Request) received;
-
-                        // ✅ Логирование команды
                         System.out.println("📝 Получена команда: " + request.getMessage());
 
-                        // ✅ Получаем команду из CommandManager
+                        // ✅ Выполнение команды
                         CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
-                        Command command = commandManager.getCommandList().get(request.getMessage());
+                        String result = commandManager.startExecuting(request);
 
-                        if (command == null) {
-                            out.writeObject(new Response("⛔ Команда не найдена!"));
-                            out.flush();
-                            continue;
-                        }
-
-                        // ✅ Выполняем команду
-                        String result;
-                        try {
-                            result = command.execute(request);
-                        } catch (Exception e) {
-                            result = "⛔ Ошибка при выполнении команды: " + e.getMessage();
-                        }
-
-                        // ✅ Возвращаем результат выполнения
+                        // ✅ Отправляем результат обратно клиенту
                         Response response = new Response(result);
                         out.writeObject(response);
                         out.flush();
