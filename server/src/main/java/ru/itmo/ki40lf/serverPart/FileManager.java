@@ -12,16 +12,18 @@ import java.util.List;
 
 public class FileManager {
     private final String filePath;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
     public FileManager(String filePath) {
         this.filePath = filePath;
     }
 
     // Чтение из CSV файла
-    public List<Dragon> readFromCSV() {
-        List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
+    public List<Dragon> readFromCSV()  {
+        List<Dragon> dragons = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
             String[] nextLine;
+            reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
                 // Предполагается, что порядок колонок соответствует полям Dragon
                 Dragon dragon = new Dragon(
@@ -38,18 +40,19 @@ public class FileManager {
                                 nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[10])
                         )
 
+
                 );
                 dragons.add(dragon);
             }
         } catch (Exception e) {
-            System.err.println("ZALUPA" + e.getMessage());
+            e.printStackTrace();
         }
         return dragons;
     }
 
     // Запись в CSV файл
     public void writeToCSV(List<Dragon> dragons) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(filePath))) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter("D:/ITMO/dragons.csv"))) {
             for (Dragon dragon : dragons) {
                 String[] record = {
                         String.valueOf(dragon.getId()),
@@ -66,7 +69,7 @@ public class FileManager {
                 writer.writeNext(record);
             }
         } catch (Exception e) {
-            System.err.println("ZALUPAWRITE" + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

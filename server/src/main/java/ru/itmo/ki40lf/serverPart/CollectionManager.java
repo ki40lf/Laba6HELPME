@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class CollectionManager {
-    private List<Dragon> dragons = new ArrayList<>();
+    private List<Dragon> dragons = ServerEnvironment.getInstance().getFileManager().readFromCSV();
     private ZonedDateTime initializationTime;
 
     public CollectionManager() {
