@@ -1,10 +1,6 @@
 package ru.itmo.ki40lf.commands;
-
-
-import ru.itmo.ki40lf.serverPart.Request;
-
-import java.io.InputStream;
-import java.io.PrintStream;
+import ru.itmo.ki40lf.common.Request;
+import ru.itmo.ki40lf.common.Response;
 
 public abstract class Command {
     private final String name;

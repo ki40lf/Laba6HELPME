@@ -12,16 +12,16 @@ import java.util.List;
 
 public class FileManager {
     private final String filePath;
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
     public FileManager(String filePath) {
         this.filePath = filePath;
     }
 
     // Чтение из CSV файла
-    public List<Dragon> readFromCSV()  {
+    public List<Dragon> readFromCSV() {
         List<Dragon> dragons = new ArrayList<>();
-        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+        try (CSVReader reader = new CSVReader(new FileReader("D:/ITMO/dragons.csv"))) {
+
             String[] nextLine;
             reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
@@ -37,7 +37,7 @@ public class FileManager {
                         DragonCharacter.valueOf(nextLine[8]),
                         new DragonCave(
                                 Double.parseDouble(nextLine[9]),    // Depth
-                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[10])
+                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[9])
                         )
 
 

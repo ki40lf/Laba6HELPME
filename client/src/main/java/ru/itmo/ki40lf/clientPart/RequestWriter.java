@@ -1,5 +1,5 @@
 package ru.itmo.ki40lf.clientPart;
-
+import ru.itmo.ki40lf.common.Request;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 

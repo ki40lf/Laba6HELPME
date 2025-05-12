@@ -1,4 +1,6 @@
 package ru.itmo.ki40lf.serverPart;
+import ru.itmo.ki40lf.common.Request;
+import ru.itmo.ki40lf.common.Response;
 
 import ru.itmo.ki40lf.commands.*;
 
