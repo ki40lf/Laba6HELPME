@@ -2,6 +2,8 @@ package ru.itmo.ki40lf.serverPart;
 
 import ru.itmo.ki40lf.resources.*;
 
+import ru.itmo.ki40lf.common.Request;
+import ru.itmo.ki40lf.common.Response;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;

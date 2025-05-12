@@ -20,7 +20,7 @@ public class FileManager {
     // Чтение из CSV файла
     public List<Dragon> readFromCSV() {
         List<Dragon> dragons = new ArrayList<>();
-        try (CSVReader reader = new CSVReader(new FileReader("D:/ITMO/dragons.csv"))) {
+        try (CSVReader reader = new CSVReader(new FileReader("C:/Users/lubst/dragons.csv"))) {
 
             String[] nextLine;
             reader.readNext();
