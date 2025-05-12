@@ -32,10 +32,10 @@ public class FileManager {
                         Long.parseLong(nextLine[5]),
                         Color.valueOf(nextLine[6]),
                         DragonType.valueOf(nextLine[7]),
-                        DragonCharacter.valueOf(nextLine[10]),
+                        DragonCharacter.valueOf(nextLine[8]),
                         new DragonCave(
-                                Double.parseDouble(nextLine[8]),    // Depth
-                                nextLine[9].equals("null") ? null : Float.parseFloat(nextLine[9])
+                                Double.parseDouble(nextLine[9]),    // Depth
+                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[10])
                         )
 
                 );
