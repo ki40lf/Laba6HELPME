@@ -63,11 +63,11 @@ public class Client {
                      ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
                      ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
 
-                    // ✅ Отправляем объект Request
+                    // Отправляем объект Request
                     outputStream.writeObject(request);
                     outputStream.flush();
 
-                    // ✅ Читаем ответ от сервера
+                    // Читаем ответ от сервера
                     Response response = (Response) inputStream.readObject();
                     System.out.println("Ответ от сервера: " + response.getMessage());
 

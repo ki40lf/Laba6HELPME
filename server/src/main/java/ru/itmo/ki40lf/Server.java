@@ -18,7 +18,6 @@ public class Server {
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
-        // ✅ Инициализация ServerEnvironment:
         ServerEnvironment environment = ServerEnvironment.getInstance();
         environment.setFileManager(new FileManager("dragons.csv"));
         environment.setCollectionManager(new CollectionManager());
@@ -27,17 +26,17 @@ public class Server {
 
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("🔥 Сервер запущен на порту " + PORT);
+            System.out.println("Сервер запущен на порту " + PORT);
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("✅ Новое подключение: " + clientSocket.getInetAddress());
+                System.out.println("Новое подключение: " + clientSocket.getInetAddress());
 
                 // Обработка клиента в отдельном потоке
                 threadPool.execute(() -> handleClient(clientSocket));
             }
         } catch (IOException e) {
-            System.out.println("⛔ Ошибка при запуске сервера: " + e.getMessage());
+            System.out.println("Ошибка при запуске сервера: " + e.getMessage());
         }
     }
 
@@ -46,7 +45,7 @@ public class Server {
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
         ) {
-            System.out.println("⚡ Начало обработки клиента...");
+            System.out.println("Начало обработки клиента...");
 
             while (true) {
                 try {
@@ -54,46 +53,42 @@ public class Server {
                     if (received instanceof Request) {
                         Request request = (Request) received;
 
-                        // ✅ Логирование команды
                         System.out.println("📝 Получена команда: " + request.getMessage());
 
-                        // ✅ Получаем команду из CommandManager
                         CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
                         Command command = commandManager.getCommandList().get(request.getMessage());
 
                         if (command == null) {
-                            out.writeObject(new Response("⛔ Команда не найдена!"));
+                            out.writeObject(new Response("Команда не найдена!"));
                             out.flush();
                             continue;
                         }
 
-                        // ✅ Выполняем команду
                         String result;
                         try {
                             result = command.execute(request);
                         } catch (Exception e) {
-                            result = "⛔ Ошибка при выполнении команды: " + e.getMessage();
+                            result = "Ошибка при выполнении команды: " + e.getMessage();
                         }
 
-                        // ✅ Возвращаем результат выполнения
                         Response response = new Response(result);
                         out.writeObject(response);
                         out.flush();
-                        System.out.println("📦 Ответ отправлен клиенту: " + result);
+                        System.out.println("Ответ отправлен клиенту: " + result);
                     } else {
-                        System.out.println("❌ Некорректный объект от клиента, закрытие потока.");
+                        System.out.println("Некорректный объект от клиента, закрытие потока.");
                         break;
                     }
                 } catch (ClassNotFoundException e) {
-                    System.out.println("❌ Неизвестный объект от клиента.");
+                    System.out.println("Неизвестный объект от клиента.");
                 }
             }
         } catch (IOException e) {
-            System.out.println("⛔ Проблема с клиентом, соединение закрыто: " + e.getMessage());
+            System.out.println("Проблема с клиентом, соединение закрыто: " + e.getMessage());
         } finally {
             try {
                 clientSocket.close();
-                System.out.println("🔌 Соединение с клиентом закрыто.");
+                System.out.println("Соединение с клиентом закрыто.");
             } catch (IOException e) {
                 e.printStackTrace();
             }

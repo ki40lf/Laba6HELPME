@@ -13,7 +13,7 @@ public class ExecuteScript {
         File scriptFile = new File(filePath);
 
         if (!scriptFile.exists() || !scriptFile.isFile()) {
-            System.out.println("⛔️ Файл не найден или это не файл.");
+            System.out.println("Файл не найден или это не файл.");
             return;
         }
 
@@ -22,7 +22,7 @@ public class ExecuteScript {
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) continue; // Пропускаем пустые строки
 
-                System.out.println("📜 Выполнение команды: " + line);
+                System.out.println("Выполнение команды: " + line);
 
                 // Парсим команду
                 String[] commandLine = line.trim().split("\\s+");
@@ -36,11 +36,11 @@ public class ExecuteScript {
                 try {
                     sendRequest(request);
                 } catch (IOException e) {
-                    System.out.println("⛔️ Ошибка при выполнении команды: " + command);
+                    System.out.println("Ошибка при выполнении команды: " + command);
                 }
             }
         } catch (IOException e) {
-            System.out.println("⛔️ Ошибка при чтении файла: " + e.getMessage());
+            System.out.println("Ошибка при чтении файла: " + e.getMessage());
         }
     }
 }
