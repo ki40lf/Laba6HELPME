@@ -37,7 +37,7 @@ public class FileManager {
                         DragonCharacter.valueOf(nextLine[8]),
                         new DragonCave(
                                 Double.parseDouble(nextLine[9]),    // Depth
-                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[9])
+                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[10])
                         )
 
 

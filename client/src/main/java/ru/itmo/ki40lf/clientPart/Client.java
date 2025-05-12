@@ -28,7 +28,6 @@ public class Client {
         connect();
         Scanner scanner = new Scanner(System.in);
         FormDragons dragonGenerator = new FormDragons();
-        System.out.println("✅ Подключение установлено с сервером " + host + ":" + port);
         System.out.println("Добро пожаловать! Введите команду (или введите help для списка команд)");
 
         while (scanner.hasNextLine()) {
@@ -88,18 +87,18 @@ public class Client {
             if (channel == null || !channel.isConnected()) {
                 channel = SocketChannel.open();
                 channel.connect(new InetSocketAddress(host, port));
-                System.out.println("✅ Подключение установлено с сервером " + host + ":" + port);
+                System.out.println("Подключение установлено с сервером " + host + ":" + port);
 
-                // ✅ Потоки создаются только при первом успешном соединении
+                //Потоки создаются только при первом успешном соединении
                 if (out == null && in == null) {
                     out = new ObjectOutputStream(channel.socket().getOutputStream());
-                    out.flush(); // <-- важно, чтобы заголовок сразу отправился
+                    out.flush();
                     in = new ObjectInputStream(channel.socket().getInputStream());
-                    System.out.println("✅ Потоки ввода-вывода настроены");
+                    System.out.println("Потоки ввода-вывода настроены");
                 }
             }
         } catch (IOException e) {
-            System.out.println("⛔ Ошибка подключения: " + e.getMessage());
+            System.out.println("Ошибка подключения: " + e.getMessage());
         }
     }
 
@@ -108,25 +107,25 @@ public class Client {
      */
     public void sendRequest(Request request) throws IOException, ClassNotFoundException {
         if (channel == null || !channel.isConnected()) {
-            System.out.println("⛔ Нет подключения к серверу, попытка подключения...");
+            System.out.println( "Нет подключения к серверу, попытка подключения...");
             connect();
         }
 
         if (out != null) {
             out.writeObject(request);
             out.flush();
-            System.out.println("📤 Запрос отправлен на сервер: " + request.getMessage());
+            System.out.println("Запрос отправлен на сервер: " + request.getMessage());
 
-            // ✅ Чтение объекта-ответа
+            // Чтение объекта-ответа
             Object responseObject = in.readObject();
             if (responseObject instanceof Response) {
                 Response response = (Response) responseObject;
-                System.out.println("📦 Ответ от сервера: " + response.getMessage());
+                System.out.println("Ответ от сервера: " + response.getMessage());
             } else {
-                System.out.println("❌ Получен неизвестный ответ от сервера.");
+                System.out.println("Получен неизвестный ответ от сервера.");
             }
         } else {
-            System.out.println("❌ Поток вывода не инициализирован!");
+            System.out.println("Поток вывода не инициализирован!");
         }
     }
 
@@ -137,10 +136,10 @@ public class Client {
         try {
             if (channel != null && channel.isOpen()) {
                 channel.close();
-                System.out.println("🔌 Соединение закрыто.");
+                System.out.println("Соединение закрыто.");
             }
         } catch (IOException e) {
-            System.out.println("⛔ Ошибка при закрытии подключения: " + e.getMessage());
+            System.out.println("Ошибка при закрытии подключения: " + e.getMessage());
         }
     }
 
