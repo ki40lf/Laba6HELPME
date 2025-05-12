@@ -1,5 +1,6 @@
 package ru.itmo.ki40lf.resources;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +8,7 @@ import java.util.Set;
 /**
  * Основной класс Дркона
  */
-public class Dragon {
+public class Dragon implements Serializable {
     /** Поле индентификатора */
     private final int id;//Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     /** Поле имени */

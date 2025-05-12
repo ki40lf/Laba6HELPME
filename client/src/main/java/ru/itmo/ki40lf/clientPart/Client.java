@@ -41,7 +41,7 @@ public class Client {
                     case "save":
                         System.out.println("Сохранение коллекции не доступно с клиента");
                         break;
-                    case "update_id": //Сделать, чтобы при проблемах эта штука бэкалась назад
+                    case "update_id":
                         dragon = dragonGenerator.createDragon();
                         break;
                     case "add": //переделываю
@@ -82,12 +82,10 @@ public class Client {
         List<String> fields = new ArrayList<>();
         fields.add(escapeCsv(request.getMessage()));
 
-        // Аргументы команды
         for (String arg : request.getArgs()) {
             fields.add(escapeCsv(arg));
         }
 
-        // Данные Dragon, если есть
         if (request.getDragon() != null) {
             fields.addAll(serializeDragon(request.getDragon()));
         }

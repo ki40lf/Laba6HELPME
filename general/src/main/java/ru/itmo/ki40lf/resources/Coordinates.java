@@ -1,9 +1,11 @@
 package ru.itmo.ki40lf.resources;
 
+import java.io.Serializable;
+
 /**
  * Класс координат
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     /** Поле х */
     private float x;
     /** Поле у */

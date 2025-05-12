@@ -15,32 +15,9 @@ public class AddCommand extends Command {
     @Override
     public String execute(Request request) {
         Dragon dragon1 = request.getDragon();
-        String arg = request.getArgs()[0];
+        ServerEnvironment.getInstance().getCollectionManager().getDragons().add(dragon1);
 
-        List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
-        int id;
-
-        try {
-            id = Integer.parseInt(arg); // Читаем ID
-        } catch (NumberFormatException e) {
-            return ("Ошибка: ID должен быть числом.");
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return ("Вы не ввели айди дракона");
-        }
-
-
-        // Проверяем, есть ли дракон с таким ID
-        boolean removed = dragons.removeIf(dragon -> dragon.getId() == id);
-
-        if (!removed) {
-            return ("Ошибка: Дракон с ID " + id + " не найден.");
-        } IdGen.releaseId(id);
-
-        Dragon newDragon = dragon1; // Создаём нового дракона
-
-        dragons.add(newDragon); // Добавляем нового дракона в коллекцию
-
-        return "Дракон успешно обновлен!";
+        return "Дракон успешно добавлен";
     }
 
     @Override

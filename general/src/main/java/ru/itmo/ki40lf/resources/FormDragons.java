@@ -1,9 +1,10 @@
 package ru.itmo.ki40lf.resources;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Scanner;
 
-public class FormDragons {
+public class FormDragons implements Serializable {
     static Scanner scanner = new Scanner(System.in);
 
     public FormDragons() {}
