@@ -30,24 +30,10 @@ public class Dragon implements Serializable {
     /**Поле для генерации айди */
     private static final Set<Integer> usedIds = new HashSet<>();//Поле не может быть null
 
-    /**
-     * Пустой конструктор
-     */
     public Dragon() {
         this.id = IdGen.generateId();
     }
 
-    /**
-     * Конструктор с автоматической генерацией id
-     * @param name
-     * @param coordinates
-     * @param creationDate
-     * @param age
-     * @param color
-     * @param type
-     * @param character
-     * @param cave
-     */
     public Dragon( String name, Coordinates coordinates, ZonedDateTime creationDate, Long age, Color color, DragonType type, DragonCharacter character, DragonCave cave) {
         this.id = IdGen.generateId();
         this.setName(name);

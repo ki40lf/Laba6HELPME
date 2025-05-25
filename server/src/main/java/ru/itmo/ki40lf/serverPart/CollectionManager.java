@@ -1,12 +1,15 @@
 package ru.itmo.ki40lf.serverPart;
 
 import ru.itmo.ki40lf.resources.Dragon;
+import ru.itmo.ki40lf.resources.IdGen;
 
 import java.time.ZonedDateTime;
 import java.util.*;
 
 public class CollectionManager {
     private List<Dragon> dragons = ServerEnvironment.getInstance().getFileManager().readFromCSV();
+    IdGen idegn = new IdGen();
+    //idgen.
     private ZonedDateTime initializationTime;
 
     public CollectionManager() {
