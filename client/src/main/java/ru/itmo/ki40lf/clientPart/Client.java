@@ -37,6 +37,7 @@ public class Client {
             if (!command.isEmpty()) {
                 switch (command) {
                     case "exit":
+                        System.out.println("Хорошего дня! ♡ (*^w^)");
                         System.exit(1);
                         break;
                     case "save":
@@ -70,10 +71,12 @@ public class Client {
 
                     // Читаем ответ от сервера
                     Response response = (Response) inputStream.readObject();
-                    System.out.println("Ответ от сервера: " + response.getMessage());
+                    if (response.getMessage() != null) {
+                        System.out.println("Ответ от сервера: " + response.getMessage());
+                    }
 
                 } catch (IOException | ClassNotFoundException e) {
-                    System.out.println("Ошибка подключения к серверу: " + e.getMessage());
+                    System.out.println("Ошибка на сервере: " + e.getMessage());
                 }
             }
         }

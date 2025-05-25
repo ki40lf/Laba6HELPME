@@ -75,7 +75,11 @@ public class Server {
                         Response response = new Response(result);
                         out.writeObject(response);
                         out.flush();
-                        System.out.println("Ответ отправлен клиенту: " + result);
+                        if (result != null) {
+                            System.out.println("Ответ отправлен клиенту: " + result);
+                        } else {
+                            System.out.println("Клиент вызвал команду, невыполнимую на сервере");
+                        }
                     } else {
                         System.out.println("Некорректный объект от клиента, закрытие потока.");
                         break;

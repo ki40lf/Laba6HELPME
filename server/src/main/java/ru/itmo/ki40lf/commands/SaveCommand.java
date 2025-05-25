@@ -15,7 +15,7 @@ public class SaveCommand extends Command {
         //List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
         //ServerEnvironment.getInstance().getFileManager().writeToCSV(dragons);
         //return "Драконы успешно записаны в файл!";
-        return "Сохранение коллекции не доступно с клиента";
+        return null;//"Сохранение коллекции не доступно с клиента";
     }
 
     @Override

@@ -15,7 +15,7 @@ public class ShowCommand extends Command {
     public String execute(Request request) {
         List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
         if (dragons.isEmpty()) {
-            return "Collection is empty";
+            return "Коллекция пуста";
         }
         StringBuilder text = new StringBuilder();
         if (request.getMessage().split(" ").length == 1) {

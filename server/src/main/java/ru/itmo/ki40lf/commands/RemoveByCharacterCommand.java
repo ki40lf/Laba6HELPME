@@ -18,13 +18,17 @@ public class RemoveByCharacterCommand extends Command {
             return "Коллекция пуста! Попробуйте другую команду";
         }
 
+        if (request.getArgs().length == 0){
+            return "Вы не ввели характер дракона";
+        }
+
         DragonCharacter finalCharacter;
         while (true) {
             try {
                 finalCharacter = DragonCharacter.valueOf(request.getArgs()[0]);
                 break;
             } catch (IllegalArgumentException e) {
-                System.err.println("Ошибка: Неверный ввод. Попробуйте снова.");
+                return "Такого характера нет, попробуйте снова";
             }
         }
 
