@@ -56,20 +56,21 @@ public class Server {
                         System.out.println("Получена команда: " + request.getMessage());
 
                         CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
-                        Command command = commandManager.getCommandList().get(request.getMessage());
-
-                        if (command == null) {
-                            out.writeObject(new Response("Команда не найдена!"));
-                            out.flush();
-                            continue;
-                        }
-
-                        String result;
-                        try {
-                            result = command.execute(request);
-                        } catch (Exception e) {
-                            result = "Ошибка при выполнении команды: " + e.getMessage();
-                        }
+                        //Command command = commandManager.getCommandList().get(request.getMessage());
+//
+//                        if (command == null) {
+//                            out.writeObject(new Response("Команда не найдена!"));
+//                            out.flush();
+//                            continue;
+//                        }
+//
+//                        String result;
+//                        try {
+//                            result = command.execute(request);
+//                        } catch (Exception e) {
+//                            result = "Ошибка при выполнении команды: " + e.getMessage();
+//                        }
+                        String result = commandManager.startExecuting(request);
 
                         Response response = new Response(result);
                         out.writeObject(response);

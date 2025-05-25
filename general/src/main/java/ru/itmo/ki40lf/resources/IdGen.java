@@ -23,12 +23,14 @@ public class IdGen {
     /** Регистрирует ID (если уже существует — выбрасывает ошибку)
      * @param id
      */
-    public static void registerId(int id) {
+    public static Integer registerId(int id) {
         if (usedIds.contains(id)) {
             throw new IllegalArgumentException("Ошибка: ID " + id + " уже используется!");
         }
         usedIds.add(id);
         idCounter = Math.max(idCounter, id + 1);
+        id = idCounter;
+        return id;
     }
 
     /** Освобождает ID

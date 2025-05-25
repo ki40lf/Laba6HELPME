@@ -15,6 +15,6 @@ public class ClearCommand extends Command {
 
     @Override
     public String getHelp() {
-        return "";
+        return "clean the dragon collection";
     }
 }

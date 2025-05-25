@@ -59,7 +59,7 @@ public class Client {
                         break;
                 }
 
-                request = new Request(input, arguments, dragon);
+                request = new Request(command, arguments, dragon);
                 try (Socket socket = new Socket("localhost", 12345);
                      ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
                      ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {

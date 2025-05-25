@@ -27,7 +27,7 @@ public class FileManager {
             while ((nextLine = reader.readNext()) != null) {
                 // Предполагается, что порядок колонок соответствует полям Dragon
                 Dragon dragon = new Dragon(
-                        Integer.parseInt(nextLine[0]),
+                        IdGen.registerId(Integer.parseInt(nextLine[0])),
                         nextLine[1],
                         new Coordinates(Float.parseFloat(nextLine[2]), Double.parseDouble(nextLine[3])),
                         ZonedDateTime.parse(nextLine[4], DateTimeFormatter.ISO_ZONED_DATE_TIME),

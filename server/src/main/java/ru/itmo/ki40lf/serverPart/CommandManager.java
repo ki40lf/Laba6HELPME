@@ -25,6 +25,7 @@ public class CommandManager {
         commandList.put("save", new SaveCommand());
         commandList.put("show", new ShowCommand());
         commandList.put("update_id", new UpdateIdCommand());
+        commandList.put("execute_script", new ExecuteScriptFakeCommand());
     }
 
     public HashMap<String, Command> getCommandList() {
@@ -33,6 +34,7 @@ public class CommandManager {
 
     public String startExecuting(Request request) {
         String commandName = request.getMessage();
+        System.out.println("Executing command: " + commandName);
         if (commandList.containsKey(commandName)) {
             Command command = commandList.get(commandName);
             String message = command.execute(request);
