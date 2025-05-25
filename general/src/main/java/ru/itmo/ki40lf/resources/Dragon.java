@@ -9,8 +9,8 @@ import java.util.Set;
  * Основной класс Дркона
  */
 public class Dragon implements Serializable {
-    /** Поле индентификатора */
-    private final int id;//Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    //до 25.05 было файнолом
+    private int id;//Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     /** Поле имени */
     private String name; //Поле не может быть null, Строка не может быть пустой
     /** Поле координат */
@@ -77,6 +77,10 @@ public class Dragon implements Serializable {
      */
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
