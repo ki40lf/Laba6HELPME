@@ -5,7 +5,9 @@ public class IdGen {
     private static int idCounter = 1;
     private static HashSet<Integer> usedIds = new HashSet<>();
 
-    //public getUsedIds
+    public HashSet<Integer> getUsedIds() {
+        return usedIds;
+    }
 
     public static int generateId() {
         int newId = 1;

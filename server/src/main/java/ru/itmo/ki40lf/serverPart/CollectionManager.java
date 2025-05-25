@@ -8,12 +8,23 @@ import java.util.*;
 
 public class CollectionManager {
     private List<Dragon> dragons = ServerEnvironment.getInstance().getFileManager().readFromCSV();
-    IdGen idegn = new IdGen();
-    //idgen.
+    IdGen idgen = new IdGen();
+    HashSet<Integer> usedIds = idgen.getUsedIds();
+
+    public void initUsedIds() {
+        for (int i = 0; i < dragons.size(); i++) {
+            Dragon dragon = dragons.get(i);
+            int id = dragon.getId();
+            usedIds.add(id);
+        }
+    }
+
+
     private ZonedDateTime initializationTime;
 
     public CollectionManager() {
         this.initializationTime = ZonedDateTime.now();
+        this.initUsedIds();
     }
 
     public String add(Dragon dragon) {
