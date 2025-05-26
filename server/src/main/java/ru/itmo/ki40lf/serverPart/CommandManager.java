@@ -40,7 +40,7 @@ public class CommandManager {
             String message = command.execute(request);
             return message;
         } else {
-            return "Command doesn't exist";
+            return "Команда не найдена";
         }
     }
 }

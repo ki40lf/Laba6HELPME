@@ -2,6 +2,7 @@ package ru.itmo.ki40lf;
 import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.common.Response;
 import ru.itmo.ki40lf.commands.Command;
+import ru.itmo.ki40lf.resources.Dragon;
 import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 import ru.itmo.ki40lf.serverPart.CollectionManager;
 import ru.itmo.ki40lf.serverPart.CommandManager;
@@ -10,6 +11,8 @@ import ru.itmo.ki40lf.serverPart.FileManager;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,6 +38,7 @@ public class Server {
                 // Обработка клиента в отдельном потоке
                 threadPool.execute(() -> handleClient(clientSocket));
             }
+
         } catch (IOException e) {
             System.out.println("Ошибка при запуске сервера: " + e.getMessage());
         }
@@ -57,13 +61,13 @@ public class Server {
 
                         CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
                         //Command command = commandManager.getCommandList().get(request.getMessage());
-//
+
 //                        if (command == null) {
 //                            out.writeObject(new Response("Команда не найдена!"));
 //                            out.flush();
 //                            continue;
 //                        }
-//
+
 //                        String result;
 //                        try {
 //                            result = command.execute(request);
