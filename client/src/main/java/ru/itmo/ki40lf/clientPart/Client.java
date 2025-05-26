@@ -52,7 +52,7 @@ public class Client {
                     case "execute_script":
                         if (arguments.length != 0) {
                             ExecuteScript.executeScript(arguments[0]);
-                            //ExecuteScript.executeScript("C/Users/lubst/FilesCommands.csv");
+                            ExecuteScript.getUsedFiles().clear();
                         } else {
                             System.out.println("Что-то не так с аргументами");
                         }
@@ -80,68 +80,6 @@ public class Client {
                     System.out.println("Ошибка на сервере: " + e.getMessage());
                 }
             }
-        }
-    }
-
-    private String serializeRequestToCSV(Request request) {
-        List<String> fields = new ArrayList<>();
-        fields.add(escapeCsv(request.getMessage()));
-
-        for (String arg : request.getArgs()) {
-            fields.add(escapeCsv(arg));
-        }
-
-        if (request.getDragon() != null) {
-            fields.addAll(serializeDragon(request.getDragon()));
-        }
-
-        return String.join(",", fields);
-    }
-
-    private List<String> serializeDragon(Dragon dragon) {
-        List<String> fields = new ArrayList<>();
-        fields.add(escapeCsv(String.valueOf(dragon.getId())));
-        fields.add(escapeCsv(dragon.getName()));
-
-        Coordinates coord = dragon.getCoordinates();
-        fields.add(escapeCsv(String.valueOf(coord.getX())));
-        fields.add(escapeCsv(String.valueOf(coord.getY())));
-        fields.add(escapeCsv(String.valueOf(dragon.getCreationDate())));  // Изменилось CreationDate -> ZoneDate
-        fields.add(escapeCsv(String.valueOf(dragon.getAge())));
-        fields.add(escapeCsv(dragon.getColor().toString()));
-        fields.add(escapeCsv(dragon.getType().toString()));
-        fields.add(escapeCsv(dragon.getCharacter().toString()));
-        fields.add(escapeCsv(String.valueOf(dragon.getCave().getDepth())));
-        fields.add(escapeCsv(String.valueOf(dragon.getCave().getNumberOfTreasures())));
-
-        return fields;
-    }
-
-    private String escapeCsv(String value) {
-        if (value == null) return "";
-        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
-            return "\"" + value.replace("\"", "\"\"") + "\"";
-        }
-        return value;
-    }
-
-    public static void sendRequest(Request request) throws IOException {
-        Client client = new Client();
-        String csvRequest = client.serializeRequestToCSV(request) + "\n";
-
-        try (SocketChannel channel = SocketChannel.open()) {
-            channel.connect(new InetSocketAddress("localhost", 12345));
-            ByteBuffer buffer = ByteBuffer.wrap(csvRequest.getBytes());
-            channel.write(buffer);
-
-            ByteBuffer responseBuffer = ByteBuffer.allocate(8192);
-            channel.read(responseBuffer);
-            responseBuffer.flip();
-            String response = new String(responseBuffer.array()).trim();
-            System.out.println(response);
-
-        } catch (IOException e) {
-            System.out.println("Ошибка подключения к серверу: " + e.getMessage());
         }
     }
 }

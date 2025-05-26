@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
-import static ru.itmo.ki40lf.clientPart.Client.sendRequest;
 
 public class ExecuteScript {
     private static ArrayList<String> usedFiles = new ArrayList<>() ;
+    public static ArrayList<String> getUsedFiles() {
+        return usedFiles;
+    }
 
     public static void executeScript(String fileName) {
         //File scriptFile = new File(fileName);
