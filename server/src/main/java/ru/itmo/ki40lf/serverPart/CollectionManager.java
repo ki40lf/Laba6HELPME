@@ -29,14 +29,7 @@ public class CollectionManager {
     public String add(Dragon dragon) {
 
         dragons.add(dragon);
-        return "Dragon added: " + dragon.getName();
-    }
-
-    public String show() {
-        if (dragons.isEmpty()) return "Collection is empty.";
-        StringBuilder sb = new StringBuilder();
-        for (Dragon d : dragons) sb.append(d).append("\n");
-        return sb.toString();
+        return "Дракон добавлен: " + dragon.getName();
     }
 
     public List<Dragon> getAll() {

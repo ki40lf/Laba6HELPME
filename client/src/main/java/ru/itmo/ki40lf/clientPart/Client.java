@@ -84,9 +84,7 @@ public class Client {
                 }
 
                 request = new Request(command, arguments, dragon);
-                try (Socket socket = new Socket("localhost", 12345);
-                     ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-                     ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
+                try  {
 
                     // Отправляем объект Request
                     outputStream.writeObject(request);
