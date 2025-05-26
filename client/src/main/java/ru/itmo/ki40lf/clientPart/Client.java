@@ -51,7 +51,8 @@ public class Client {
                         break;
                     case "execute_script":
                         if (arguments.length != 0) {
-                            ExecuteScript.executeScript("C/Users/lubst/FilesCommands.csv");
+                            ExecuteScript.executeScript(arguments[0]);
+                            //ExecuteScript.executeScript("C/Users/lubst/FilesCommands.csv");
                         } else {
                             System.out.println("Что-то не так с аргументами");
                         }
@@ -140,7 +141,7 @@ public class Client {
             System.out.println(response);
 
         } catch (IOException e) {
-            System.out.println("Server connection error: " + e.getMessage());
+            System.out.println("Ошибка подключения к серверу: " + e.getMessage());
         }
     }
 }

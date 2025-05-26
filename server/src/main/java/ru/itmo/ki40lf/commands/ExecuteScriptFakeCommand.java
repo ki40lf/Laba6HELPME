@@ -9,7 +9,7 @@ public class ExecuteScriptFakeCommand extends Command {
 
     @Override
     public String execute(Request request) {
-        return "IT'S gornyi";
+        return "Execute_script завершен";
     }
 
     @Override

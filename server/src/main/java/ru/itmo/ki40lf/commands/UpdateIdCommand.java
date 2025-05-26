@@ -14,12 +14,12 @@ public class UpdateIdCommand extends Command {
     @Override
     public String execute(Request request) {
         Dragon dragon1 = request.getDragon();
-        String arg = request.getArgs()[0];
 
         List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
         int id;
 
         try {
+            String arg = request.getArgs()[0];
             id = Integer.parseInt(arg); // Читаем ID
         } catch (NumberFormatException e) {
             return ("Ошибка: ID должен быть числом.");
