@@ -25,7 +25,6 @@ public class FileManager {
             String[] nextLine;
             reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
-                // Предполагается, что порядок колонок соответствует полям Dragon
                 Dragon dragon = new Dragon(
                         IdGen.registerId(Integer.parseInt(nextLine[0])),
                         nextLine[1],
