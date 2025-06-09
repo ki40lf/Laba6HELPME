@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserManager {
-    private static final Map<String, String> users = new HashMap<>();
-    private static final Path userFile = Paths.get("users.csv");
+    private final Map<String, String> users = new HashMap<>();
+    private final Path userFile = Paths.get("users.csv");
     private final MessageDigest digest;
 
     public UserManager() {

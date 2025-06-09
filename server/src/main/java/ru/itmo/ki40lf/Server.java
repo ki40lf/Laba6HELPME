@@ -7,6 +7,7 @@ import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 import ru.itmo.ki40lf.serverPart.CollectionManager;
 import ru.itmo.ki40lf.serverPart.CommandManager;
 import ru.itmo.ki40lf.serverPart.FileManager;
+import ru.itmo.ki40lf.userManager.UserManager;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -25,6 +26,7 @@ public class Server {
         environment.setFileManager(new FileManager("dragons.csv"));
         environment.setCollectionManager(new CollectionManager());
         environment.setCommandManager(new CommandManager());
+        environment.setUserManager(new UserManager());
 
 
 
@@ -59,11 +61,39 @@ public class Server {
 
                         System.out.println("Получена команда: " + request.getMessage());
 
-                        CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
+                        Response response = null;
+                        String result = null;
 
-                        String result = commandManager.startExecuting(request);
+                        if (!request.getMessage().equals("register") || !request.getMessage().equals("login")) {
+                            CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
 
-                        Response response = new Response(result);
+                            result = commandManager.startExecuting(request);
+
+                            response = new Response(result);
+                        } if (request.getMessage().equals("register")) {
+                            UserManager userManager = ServerEnvironment.getInstance().getUserManager();
+                            boolean ok = userManager.registerUser(request.getLogin(), request.getPasswordHash());
+                            if (ok) {
+                                result = "Регистрация прошла успешно!";
+                                response = new Response(result, ok);
+                            } else {
+                                result = "Такой пользователь уже существует!";
+                                response = new Response(result, ok);
+                            }
+                        } if (request.getMessage().equals("login")) {
+                            UserManager userManager = ServerEnvironment.getInstance().getUserManager();
+                            boolean ok = userManager.authenticate(request.getLogin(), request.getPasswordHash());
+                            if (ok) {
+                                //authenticated = true;
+                                //currentLogin = request.getLogin()
+                                result = "Выполнен вход на аккаунт" + request.getLogin();
+                                response = new Response(result, ok);
+                            } else {
+                                result = "Не удалось войти в аккаунт! Попробуйте ввести другой пароль или зарегистрироваться";
+                                response = new Response(result, ok);
+                            }
+                        } //проверка аутентификации?
+
                         out.writeObject(response);
                         out.flush();
                         if (result != null) {
