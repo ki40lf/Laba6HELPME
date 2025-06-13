@@ -25,7 +25,7 @@ public class Server {
         ServerEnvironment environment = ServerEnvironment.getInstance();
         environment.setFileManager(new FileManager("dragons.csv"));
         environment.setCollectionManager(new CollectionManager());
-        environment.setCommandManager(new CommandManager());
+        environment.setCommandManager(new CommandManager(UserManager userManager));
         environment.setUserManager(new UserManager());
 
 
@@ -52,55 +52,34 @@ public class Server {
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             System.out.println("Начало обработки клиента...");
+            CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
+            UserManager userManager = ServerEnvironment.getInstance().getUserManager();
 
             while (true) {
                 try {
                     Object received = in.readObject();
-                    if (received instanceof Request) {
-                        Request request = (Request) received;
-
+                    if (received instanceof Request request) {
                         System.out.println("Получена команда: " + request.getMessage());
 
-                        Response response = null;
-                        String result = null;
-
-                        if (!request.getMessage().equals("register") || !request.getMessage().equals("login")) {
-                            CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
-
-                            result = commandManager.startExecuting(request);
-
-                            response = new Response(result);
-                        } if (request.getMessage().equals("register")) {
-                            UserManager userManager = ServerEnvironment.getInstance().getUserManager();
-                            boolean ok = userManager.registerUser(request.getLogin(), request.getPasswordHash());
-                            if (ok) {
-                                result = "Регистрация прошла успешно!";
-                                response = new Response(result, ok);
-                            } else {
-                                result = "Такой пользователь уже существует!";
-                                response = new Response(result, ok);
-                            }
-                        } if (request.getMessage().equals("login")) {
-                            UserManager userManager = ServerEnvironment.getInstance().getUserManager();
-                            boolean ok = userManager.authenticate(request.getLogin(), request.getPasswordHash());
-                            if (ok) {
-                                //authenticated = true;
-                                //currentLogin = request.getLogin()
-                                result = "Выполнен вход на аккаунт" + request.getLogin();
-                                response = new Response(result, ok);
-                            } else {
-                                result = "Не удалось войти в аккаунт! Попробуйте ввести другой пароль или зарегистрироваться";
-                                response = new Response(result, ok);
-                            }
-                        } //проверка аутентификации?
-
-                        out.writeObject(response);
-                        out.flush();
-                        if (result != null) {
-                            System.out.println("Ответ отправлен клиенту: " + result);
-                        } else {
-                            System.out.println("Клиент вызвал команду, невыполнимую на сервере");
+                        Command command = commandManager.getCommandL(request.getMessage());
+                        if (command == null) {
+                            out.writeObject(new Response("Неизвестная команда: " + request.getMessage()));
+                            continue;
                         }
+
+                        if (command.needsAuthorization()) {
+                            if (request.getCredentials() == null ||
+                                    !userManager.authenticate(request.getCredentials().getLogin(), request.getCredentials().getPassword())) {
+                                out.writeObject(new Response("Ошибка: требуется авторизация."));
+                                continue;
+                            }
+                        }
+
+                        String result = command.execute(request);
+                        out.writeObject(new Response(result));
+                        out.flush();
+
+                        System.out.println("Ответ отправлен клиенту: " + result);
                     } else {
                         System.out.println("Некорректный объект от клиента, закрытие потока.");
                         break;
@@ -120,4 +99,3 @@ public class Server {
             }
         }
     }
-}

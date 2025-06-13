@@ -16,4 +16,7 @@ public abstract class Command {
     public abstract String execute(Request request);
 
     public abstract String getHelp();
+    public boolean needsAuthorization() {
+        return true;
+    }
 }
