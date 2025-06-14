@@ -13,8 +13,8 @@ public class Client {
     private static ObjectOutputStream outputStream;
     private static ObjectInputStream inputStream;
     //new
-    private String currentLogin;
-    private String currentPassword;
+    private String currentLogin = null;
+    private String currentPassword = null;
 
     public void connect() {
         try {
@@ -113,7 +113,7 @@ public class Client {
                         break;
                 }
 
-                request = new Request(command, arguments, dragon);
+                request = new Request(command, arguments, dragon, currentLogin, currentPassword);
                 try  {
 
                     // Отправляем объект Request

@@ -44,6 +44,9 @@ public class ExecuteScript {
                 System.out.println("Выполнение команды: " + line);
 
                 Dragon dragon = null;
+                String login = null;
+                String password = null;
+
                 // Парсим команду
                 String[] commandLine = line.trim().split("\\s+");
                 String command = commandLine[0];
@@ -79,7 +82,7 @@ public class ExecuteScript {
 
 
                     // Формируем запрос
-                Request request = new Request(command, arguments, dragon);
+                Request request = new Request(command, arguments, dragon, login, password); //ЧЕ ЗА КАЛЛ
 
 
                 try (Socket socket = new Socket("localhost", 12345);

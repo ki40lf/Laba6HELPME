@@ -13,6 +13,7 @@ import ru.itmo.ki40lf.userManager.UserManager;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.concurrent.*;
 
 public class Server {
@@ -62,6 +63,7 @@ public class Server {
                             return;
                         }
                         Request request = (Request) received;
+                        System.out.println("ПОЙМАЛИИИИИ"); //удалить
 
                         requestProcessPool.submit(() -> {
                             try {
@@ -88,7 +90,7 @@ public class Server {
 
                                     if (command == null) {
                                         response = new Response("Неизвестная команда: " + message);
-                                    } else if (command.needsAuthorization() && request.getCredentials() == null) {
+                                    } else if (command.needsAuthorization() && request.getCredentials().getLogin() == null) {
                                         response = new Response("Ошибка: требуется авторизация.");
                                     } else {
                                         result = command.execute(request);
@@ -112,8 +114,10 @@ public class Server {
                             }
                         });
 
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         System.out.println("Ошибка чтения от клиента: " + e.getMessage());
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
                 });
             }

@@ -14,6 +14,15 @@ public class Request implements Serializable {
     private final String passwordHash;
     private final Credentials credentials;
 
+    public Request(String message, String[] args, Dragon dragon, String login, String passwordHash){
+        this.message = message;
+        this.args = args;
+        this.dragon = dragon;
+        this.login = login;
+        this.passwordHash = passwordHash;
+        this.credentials = new Credentials(login, passwordHash);
+    }
+
     public Request(String message, String[] args, Dragon dragon, Credentials credentials) {
         this.message = message;
         this.credentials = credentials;
