@@ -29,17 +29,21 @@ public class UpdateIdCommand extends Command {
 
 
         // Проверяем, есть ли дракон с таким ID
-        boolean removed = dragons.removeIf(dragon -> dragon.getId() == id);
+        boolean removed = dragons.removeIf(dragon ->
+                dragon.getId() == id &&
+                        dragon.getOwner() != null &&
+                        dragon.getOwner().equals(request.getCredentials().getLogin())
+        );
 
         if (!removed) {
-            return ("Ошибка: Дракон с ID " + id + " не найден.");
+            return "Ошибка: Дракон с таким ID не найден или он вам не принадлежит.";
         } IdGen.releaseId(id);
 
-        Dragon newDragon = dragon1; // Создаём нового дракона
+        dragon1.setId(id);
+        dragon1.setOwner(request.getCredentials().getLogin()); // 🔥 вот здесь
 
-        dragons.add(newDragon); // Добавляем нового дракона в коллекцию
-
-        return "Дракон успешно обновлен!";
+        dragons.add(dragon1);
+        return "Дракон с ID " + id + " обновлён.";
     }
 
     @Override
