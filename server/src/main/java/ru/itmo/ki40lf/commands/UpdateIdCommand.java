@@ -37,7 +37,7 @@ public class UpdateIdCommand extends Command {
 
         if (!removed) {
             return "Ошибка: Дракон с таким ID не найден или он вам не принадлежит.";
-        } IdGen.releaseId(id);
+        } //IdGen.releaseId(id);
 
         dragon1.setId(id);
         dragon1.setOwner(request.getCredentials().getLogin());

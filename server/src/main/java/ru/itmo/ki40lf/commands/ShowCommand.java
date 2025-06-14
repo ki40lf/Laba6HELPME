@@ -20,9 +20,8 @@ public class ShowCommand extends Command {
 
         String currentUser = request.getCredentials().getLogin();
 
-        // Фильтруем драконов по владельцу
         String result = dragons.stream()
-                .filter(dragon -> currentUser.equals(dragon.getOwner()))
+                //.filter(dragon -> currentUser.equals(dragon.getOwner()))
                 .map(Dragon::toString)
                 .collect(Collectors.joining("\n"));
 

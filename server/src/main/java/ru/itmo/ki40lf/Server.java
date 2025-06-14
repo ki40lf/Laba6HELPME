@@ -63,7 +63,7 @@ public class Server {
                             return;
                         }
                         Request request = (Request) received;
-                        System.out.println("Получен запрос от клиента: " + request);
+                        System.out.println("Получен запрос от клиента: " + request.getMessage());
 
                         requestProcessPool.submit(() -> {
                             try {

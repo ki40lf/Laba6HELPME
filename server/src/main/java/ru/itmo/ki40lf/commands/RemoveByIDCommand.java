@@ -1,6 +1,7 @@
 package ru.itmo.ki40lf.commands;
 import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.resources.Dragon;
+import ru.itmo.ki40lf.resources.IdGen;
 import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 
 import java.util.Iterator;
@@ -34,9 +35,12 @@ public class RemoveByIDCommand extends Command {
 
         while (iterator.hasNext()) {Dragon dragon = iterator.next();
             if (dragon.getId() == id &&
-                    dragon.getOwner() != null &&
-                    dragon.getOwner().equals(request.getCredentials().getLogin())) {
+                    dragon.getOwner() != null) {
+                if (!dragon.getOwner().equals(request.getCredentials().getLogin())) {
+                    return "Ошибка: этот дракон не принадлежит вам.";
+                }
                 iterator.remove();
+                IdGen.releaseId(dragon.getId());
                 removed = true;
                 break;
             }
