@@ -23,11 +23,16 @@ public class Server {
 
     public static void main(String[] args) {
         ServerEnvironment environment = ServerEnvironment.getInstance();
-        environment.setFileManager(new FileManager("dragons.csv"));
-        environment.setCollectionManager(new CollectionManager());
-        environment.setCommandManager(new CommandManager(UserManager userManager));
-        environment.setUserManager(new UserManager());
 
+        FileManager fileManager = new FileManager("dragons.csv");
+        CollectionManager collectionManager = new CollectionManager();
+        UserManager userManager = new UserManager();
+        CommandManager commandManager = new CommandManager(userManager);
+
+        environment.setFileManager(fileManager);
+        environment.setCollectionManager(collectionManager);
+        environment.setUserManager(userManager);
+        environment.setCommandManager(commandManager);
 
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -52,38 +57,48 @@ public class Server {
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             System.out.println("Начало обработки клиента...");
+
             CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
             UserManager userManager = ServerEnvironment.getInstance().getUserManager();
 
             while (true) {
                 try {
                     Object received = in.readObject();
-                    if (received instanceof Request request) {
-                        System.out.println("Получена команда: " + request.getMessage());
-
-                        Command command = commandManager.getCommandL(request.getMessage());
-                        if (command == null) {
-                            out.writeObject(new Response("Неизвестная команда: " + request.getMessage()));
-                            continue;
-                        }
-
-                        if (command.needsAuthorization()) {
-                            if (request.getCredentials() == null ||
-                                    !userManager.authenticate(request.getCredentials().getLogin(), request.getCredentials().getPassword())) {
-                                out.writeObject(new Response("Ошибка: требуется авторизация."));
-                                continue;
-                            }
-                        }
-
-                        String result = command.execute(request);
-                        out.writeObject(new Response(result));
-                        out.flush();
-
-                        System.out.println("Ответ отправлен клиенту: " + result);
-                    } else {
-                        System.out.println("Некорректный объект от клиента, закрытие потока.");
+                    if (!(received instanceof Request)) {
+                        System.out.println("Некорректный объект от клиента");
                         break;
                     }
+                    Request request = (Request) received;
+
+                    System.out.println("Получена команда: " + request.getMessage());
+
+                    Command command = commandManager.getCommand(request.getMessage());
+                    if (command == null) {
+                        out.writeObject(new Response("Неизвестная команда: " + request.getMessage()));
+                        out.flush();
+                        continue;
+                    }
+
+                    // 🔐 Проверка авторизации
+                    if (command.needsAuthorization()) {
+                        if (request.getCredentials() == null ||
+                                !userManager.authenticate(
+                                        request.getCredentials().getLogin(),
+                                        request.getCredentials().getPassword())) {
+                            out.writeObject(new Response("Ошибка: требуется авторизация."));
+                            out.flush();
+                            continue;
+                        }
+                    }
+
+                    // ✅ Выполнение команды
+                    String result = command.execute(request);
+                    Response response = new Response(result);
+                    out.writeObject(response);
+                    out.flush();
+
+                    System.out.println("Ответ отправлен клиенту: " + result);
+
                 } catch (ClassNotFoundException e) {
                     System.out.println("Неизвестный объект от клиента.");
                 }
@@ -99,3 +114,4 @@ public class Server {
             }
         }
     }
+}

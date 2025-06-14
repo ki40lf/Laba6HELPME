@@ -46,4 +46,7 @@ public class CommandManager {
             return "Команда не найдена";
         }
     }
+    public Command getCommand(String name) {
+        return commandList.get(name);
+    }
 }
