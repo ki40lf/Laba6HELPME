@@ -1,10 +1,6 @@
 package ru.itmo.ki40lf.userManager;
 
-import ru.itmo.ki40lf.common.PasswordHasher;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +10,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class UserManager {
     private final Map<String, String> users = new HashMap<>();
@@ -27,37 +22,42 @@ public class UserManager {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-224 не поддерживается", e);
         }
-        loadUsers();
     }
 
-    private void loadUsers() {
-        if (!Files.exists(userFile)) {
-            return;
-        }
-        try (BufferedReader reader = Files.newBufferedReader(userFile, StandardCharsets.UTF_8)) {
+    public void loadUsers(String path) {
+        Path file = Paths.get(path);
+        if (!Files.exists(file)) return;
+        try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length >= 2) {
-                    String login = parts[0];
-                    String hash = parts[1];
-                    users.put(login, hash);
+                String[] parts = line.split(";");
+                if (parts.length == 2) {
+                    users.put(parts[0], parts[1]);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Ошибка чтения " + path + ": " + e.getMessage());
+        }
+    }
+
+    public void saveUsers(String path) throws IOException {
+        Path file = Paths.get(path);
+        try (BufferedWriter writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) {
+            for (Map.Entry<String, String> entry : users.entrySet()) {
+                writer.write(entry.getKey() + ";" + entry.getValue());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new IOException("Ошибка записи " + path + ": " + e.getMessage());
         }
     }
 
     public synchronized boolean registerUser(String login, String password) throws IOException {
-        if (users.containsKey(login)) {
-            return false; // пользователь уже существует
-        }
+        if (users.containsKey(login)) return false;
         String hashPassword = hashPassword(password);
         users.put(login, hashPassword);
-        // дописываем нового чела в CSV
         try (BufferedWriter writer = Files.newBufferedWriter(userFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-            writer.write(login + "," + hashPassword);
+            writer.write(login + ";" + hashPassword);
             writer.newLine();
         }
         return true;
@@ -65,16 +65,13 @@ public class UserManager {
 
     public synchronized boolean authenticate(String login, String password) {
         String storedHash = users.get(login);
-        if (storedHash == null) {
-            return false;
-        }
+        if (storedHash == null) return false;
         String hashPassword = hashPassword(password);
         return storedHash.equals(hashPassword);
     }
 
     private String hashPassword(String password) {
         byte[] hashBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        // Конвертация в шестнадцатеричную строку
         StringBuilder hexString = new StringBuilder();
         for (byte b : hashBytes) {
             String hex = Integer.toHexString(0xff & b);
