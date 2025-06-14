@@ -40,7 +40,7 @@ public class UpdateIdCommand extends Command {
         } IdGen.releaseId(id);
 
         dragon1.setId(id);
-        dragon1.setOwner(request.getCredentials().getLogin()); // 🔥 вот здесь
+        dragon1.setOwner(request.getCredentials().getLogin());
 
         dragons.add(dragon1);
         return "Дракон с ID " + id + " обновлён.";

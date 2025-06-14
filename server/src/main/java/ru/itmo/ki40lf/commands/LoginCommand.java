@@ -30,6 +30,6 @@ public class LoginCommand extends Command {
 
     @Override
     public String getHelp() {
-        return "login : войти в систему";
+        return "войти в систему";
     }
 }

@@ -37,9 +37,9 @@ public class FileManager {
                         new DragonCave(
                                 Double.parseDouble(nextLine[9]),    // Depth
                                 nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[9])
-                        )//,
+                        ),
                         //owner
-                        //nextLine[11]
+                        nextLine[11]
 
                 );
                 dragons.add(dragon);

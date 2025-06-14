@@ -54,7 +54,7 @@ public class Server {
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
         ) {
             while (true) {
-                requestReadPool.submit(() -> {
+                //requestReadPool.submit(() -> {
                     try {
                         Object received = in.readObject();
                         if (!(received instanceof Request)) {
@@ -63,7 +63,7 @@ public class Server {
                             return;
                         }
                         Request request = (Request) received;
-                        System.out.println("ПОЙМАЛИИИИИ"); //удалить
+                        System.out.println("Получен запрос от клиента: " + request);
 
                         requestProcessPool.submit(() -> {
                             try {
@@ -72,10 +72,14 @@ public class Server {
 
                                 String message = request.getMessage();
                                 if ("register".equals(message)) {
+                                    if (request.getLogin() != null) {
+                                        response = new Response("Вы уже вошли в аккаунт", true);
+                                    } else {
                                     boolean ok = ServerEnvironment.getInstance().getUserManager()
                                             .registerUser(request.getLogin(), request.getPasswordHash());
                                     result = ok ? "Регистрация прошла успешно!" : "Такой пользователь уже существует!";
                                     response = new Response(result, ok);
+                                    }
 
                                 } else if ("login".equals(message)) {
                                     boolean ok = ServerEnvironment.getInstance().getUserManager()
@@ -119,7 +123,7 @@ public class Server {
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
-                });
+                //});
             }
         } catch (IOException e) {
             System.out.println("Проблема с клиентом: " + e.getMessage());

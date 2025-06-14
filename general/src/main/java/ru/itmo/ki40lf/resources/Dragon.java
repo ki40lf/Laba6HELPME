@@ -192,6 +192,7 @@ public class Dragon implements Serializable {
         return "Dragon: " +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", owner='" + owner + '\'' +
                 ", coordinates=(" + coordinates.getX() + ", " + coordinates.getY() + ")" +
                 ", creationDate=" + creationDate +
                 ", age=" + age +

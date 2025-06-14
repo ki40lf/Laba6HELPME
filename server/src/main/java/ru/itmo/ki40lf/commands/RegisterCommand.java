@@ -40,6 +40,6 @@ public class RegisterCommand extends Command {
 
     @Override
     public String getHelp() {
-        return "register : зарегистрироваться на сервере";
+        return "зарегистрироваться на сервере";
     }
 }
