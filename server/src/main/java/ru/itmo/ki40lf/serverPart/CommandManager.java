@@ -3,14 +3,17 @@ import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.common.Response;
 
 import ru.itmo.ki40lf.commands.*;
+import ru.itmo.ki40lf.userManager.UserManager;
 
 import java.util.HashMap;
 
 public class CommandManager {
     public static HashMap<String, Command> commandList;
 
-    public CommandManager() {
+    public CommandManager(UserManager userManager) {
         commandList = new HashMap<>();
+        commandList.put("register", new RegisterCommand(userManager));
+        commandList.put("login", new LoginCommand(userManager));
         commandList.put("add", new AddCommand());
         commandList.put("clear", new ClearCommand());
         commandList.put("help", new HelpCommand());
@@ -42,5 +45,8 @@ public class CommandManager {
         } else {
             return "Команда не найдена";
         }
+    }
+    public Command getCommand(String name) {
+        return commandList.get(name);
     }
 }

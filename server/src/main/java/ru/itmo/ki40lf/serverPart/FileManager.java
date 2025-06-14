@@ -25,7 +25,7 @@ public class FileManager {
             String[] nextLine;
             reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
-                Dragon dragon = new Dragon(
+                Dragon dragon = new Dragon( //здесь для констр для овнера
                         IdGen.registerId(Integer.parseInt(nextLine[0])),
                         nextLine[1],
                         new Coordinates(Float.parseFloat(nextLine[2]), Double.parseDouble(nextLine[3])),
@@ -37,8 +37,9 @@ public class FileManager {
                         new DragonCave(
                                 Double.parseDouble(nextLine[9]),    // Depth
                                 nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[9])
-                        )
-
+                        )//,
+                        //owner
+                        //nextLine[11]
 
                 );
                 dragons.add(dragon);

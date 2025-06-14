@@ -17,13 +17,16 @@ public class ShowCommand extends Command {
         if (dragons.isEmpty()) {
             return "Коллекция пуста";
         }
-        StringBuilder text = new StringBuilder();
-        if (request.getMessage().split(" ").length == 1) {
-            text.append(dragons.stream()
-                    .map(Dragon::toString)
-                    .collect(Collectors.joining("\n")));
-        }
-        return text.toString();
+
+        String currentUser = request.getCredentials().getLogin();
+
+        // Фильтруем драконов по владельцу
+        String result = dragons.stream()
+                .filter(dragon -> currentUser.equals(dragon.getOwner()))
+                .map(Dragon::toString)
+                .collect(Collectors.joining("\n"));
+
+        return result.isEmpty() ? "У вас нет драконов." : result;
     }
 
     @Override

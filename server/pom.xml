@@ -27,7 +27,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.itmo.ki40lf.Server</mainClass> <!-- твой main класс -->
+                            <mainClass>ru.itmo.ki40lf.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -32,8 +32,10 @@ public class RemoveByIDCommand extends Command {
         Iterator<Dragon> iterator = dragons.iterator();
         boolean removed = false;
 
-        while (iterator.hasNext()) {
-            if (iterator.next().getId() == id) {
+        while (iterator.hasNext()) {Dragon dragon = iterator.next();
+            if (dragon.getId() == id &&
+                    dragon.getOwner() != null &&
+                    dragon.getOwner().equals(request.getCredentials().getLogin())) {
                 iterator.remove();
                 removed = true;
                 break;

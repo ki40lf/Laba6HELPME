@@ -16,6 +16,9 @@ public class RemoveFirstCommand extends Command {
         List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
         if (!dragons.isEmpty()) {
             Dragon firstDragon = dragons.get(0);
+            if (!firstDragon.getOwner().equals(request.getCredentials().getLogin())) {
+                return "Ошибка: первый дракон не принадлежит вам.";
+            }
             dragons.remove(0);
             IdGen.releaseId(firstDragon.getId());
             return ("Первый дракон удален! Его ID:  " + firstDragon.getId());

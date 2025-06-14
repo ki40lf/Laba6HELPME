@@ -23,22 +23,25 @@ public class RemoveByCharacterCommand extends Command {
         }
 
         DragonCharacter finalCharacter;
-        while (true) {
-            try {
-                finalCharacter = DragonCharacter.valueOf(request.getArgs()[0]);
-                break;
-            } catch (IllegalArgumentException e) {
-                return "Такого характера нет, попробуйте снова";
-            }
+        try {
+            finalCharacter = DragonCharacter.valueOf(request.getArgs()[0]);
+        } catch (IllegalArgumentException e) {
+            return "Такого характера нет, попробуйте снова";
         }
 
-        DragonCharacter finalCharacter1 = finalCharacter;
-        boolean removed = dragons.removeIf(dragon -> dragon.getCharacter() == finalCharacter1);
+        String currentUser = request.getCredentials().getLogin();
+
+        // Удаляем только драконов с нужным характером И текущим владельцем
+        boolean removed = dragons.removeIf(dragon ->
+                dragon.getCharacter() == finalCharacter &&
+                        dragon.getOwner() != null &&
+                        dragon.getOwner().equals(currentUser)
+        );
 
         if (removed) {
-            return "Драконы с характером " + finalCharacter.toString() + " успешно удалены.";
+            return "Ваши драконы с характером " + finalCharacter + " успешно удалены.";
         } else {
-            return "Драконов с характером " + finalCharacter.toString() + " не найдено.";
+            return "Драконов с таким характером, принадлежащих вам, не найдено.";
         }
     }
 

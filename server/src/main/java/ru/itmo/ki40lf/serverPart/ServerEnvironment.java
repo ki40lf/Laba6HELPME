@@ -1,11 +1,14 @@
 package ru.itmo.ki40lf.serverPart;
 
+import ru.itmo.ki40lf.userManager.UserManager;
+
 public class ServerEnvironment {
     private static ServerEnvironment instance;
 
     CollectionManager collectionManager;
     CommandManager commandManager;
     FileManager fileManager;
+    UserManager userManager;
 
     public static ServerEnvironment getInstance() {
         if (instance == null) {
@@ -29,6 +32,10 @@ public class ServerEnvironment {
         return fileManager;
     }
 
+    public UserManager getUserManager() {
+        return userManager;
+    }
+
     public void setCollectionManager(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
@@ -39,5 +46,9 @@ public class ServerEnvironment {
 
     public void setFileManager(FileManager fileManager) {
         this.fileManager = fileManager;
+    }
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 }

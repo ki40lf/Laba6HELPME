@@ -1,25 +1,21 @@
 package ru.itmo.ki40lf.clientPart;
 import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.common.Response;
-import ru.itmo.ki40lf.resources.Coordinates;
 import ru.itmo.ki40lf.resources.Dragon;
 import ru.itmo.ki40lf.resources.FormDragons;
-import ru.itmo.ki40lf.resources.IdGen;
 
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Client {
     private static Socket socket;
     private static ObjectOutputStream outputStream;
     private static ObjectInputStream inputStream;
+    //new
+    private String currentLogin;
+    private String currentPassword;
+
     public void connect() {
         try {
             socket = new Socket("localhost", 12345);
@@ -44,6 +40,40 @@ public class Client {
         connect();
         Scanner scanner = new Scanner(System.in);
         FormDragons dragonGenerator = new FormDragons();
+
+        //new
+        System.out.println("Введите register или login:");
+
+        while (true) {
+            String[] line = scanner.nextLine().trim().split("\\s+");
+            if (line.length==0) continue;
+            if (line[0].equals("register") || line[0].equals("login")) {
+                // запрос логина/пароля
+                System.out.print("Логин: ");
+                String login = scanner.nextLine().trim();
+                System.out.print("Пароль: ");
+                String password = scanner.nextLine();
+                String hashPassword = password; // передадим открытым, хэш сделает сервер
+                try {
+                    Request request = new Request(line[0], new String[0], null, login, hashPassword);
+                    outputStream.writeObject(request); outputStream.flush();
+                    Response response = (Response) inputStream.readObject();
+                    System.out.println(response.getMessage());
+                    if (response.isSuccess()) {
+                        currentLogin = login;
+                        currentPassword = hashPassword;
+                        break;  // на авто-вход или регистрация
+                    }
+                } catch (Exception e) {
+                    System.out.println("Ошибка: "+e.getMessage());
+                }
+            } else {
+                System.out.println("Сначала выполните register или login");
+            }
+        }
+
+        //
+
         System.out.println("Добро пожаловать! Введите команду (или введите help для списка команд)");
 
         while (scanner.hasNextLine()) {

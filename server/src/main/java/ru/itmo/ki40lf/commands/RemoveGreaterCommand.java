@@ -43,7 +43,11 @@ public class RemoveGreaterCommand extends Command {
         Iterator<Dragon> iterator = dragons.iterator();
         while (iterator.hasNext()) {
             Dragon dragon = iterator.next();
-            if (dragon.getAge() > referenceDragon.getAge()) {
+            if (
+                    dragon.getAge() > referenceDragon.getAge() &&
+                            dragon.getOwner() != null &&
+                            dragon.getOwner().equals(request.getCredentials().getLogin())
+            ) {
                 iterator.remove();
             }
         }

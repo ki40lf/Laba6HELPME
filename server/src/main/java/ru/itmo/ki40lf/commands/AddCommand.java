@@ -16,8 +16,8 @@ public class AddCommand extends Command {
     public String execute(Request request) {
         Dragon dragon1 = request.getDragon();
         dragon1.setId(IdGen.regenId());
+        dragon1.setOwner(request.getCredentials().getLogin()); // 🔥 добавить эту строку
         ServerEnvironment.getInstance().getCollectionManager().getDragons().add(dragon1);
-
         return "Дракон успешно добавлен";
     }
 
