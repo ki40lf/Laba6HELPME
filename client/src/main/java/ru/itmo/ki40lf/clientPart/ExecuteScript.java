@@ -18,7 +18,7 @@ public class ExecuteScript {
         return usedFiles;
     }
 
-    public static void executeScript(String fileName) {
+    public static void executeScript(String fileName, String currentLogin, String currentPassword) {
         //File scriptFile = new File(fileName);
 
         try {
@@ -43,9 +43,10 @@ public class ExecuteScript {
 
                 System.out.println("Выполнение команды: " + line);
 
+                Request request = null;
                 Dragon dragon = null;
-                String login = null;
-                String password = null;
+                FormDragons dragonGenerator = new FormDragons();
+                boolean success = false;
 
                 // Парсим команду
                 String[] commandLine = line.trim().split("\\s+");
@@ -53,7 +54,6 @@ public class ExecuteScript {
                 String[] arguments = Arrays.copyOfRange(commandLine, 1, commandLine.length);
 
                 if (!command.isEmpty()) {
-                    FormDragons dragonGenerator = new FormDragons();
                     switch (command) {
                         case "exit":
                             System.out.println("Хорошего дня! ♡ (*^w^)");
@@ -71,7 +71,7 @@ public class ExecuteScript {
                         case "execute_script":
                             if (arguments.length != 0) {
                                 usedFiles.add(fileName);
-                                ExecuteScript.executeScript(arguments[0]);
+                                ExecuteScript.executeScript(arguments[0], currentLogin, currentPassword);
                             } else {
                                 System.out.println("В execute_script что-то не так с аргументами");
                             }
@@ -82,7 +82,7 @@ public class ExecuteScript {
 
 
                     // Формируем запрос
-                Request request = new Request(command, arguments, dragon, login, password); //ЧЕ ЗА КАЛЛ
+                request = new Request(command, arguments, dragon, currentLogin, currentPassword); //ЧЕ ЗА КАЛЛ
 
 
                 try (Socket socket = new Socket("localhost", 12345);

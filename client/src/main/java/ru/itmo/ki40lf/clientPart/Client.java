@@ -110,7 +110,7 @@ public class Client {
                         break;
                     case "execute_script":
                         if (arguments.length != 0) {
-                            ExecuteScript.executeScript(arguments[0]);
+                            ExecuteScript.executeScript(arguments[0], currentLogin, currentPassword);
                             ExecuteScript.getUsedFiles().clear();
                         } else {
                             System.out.println("Что-то не так с аргументами");

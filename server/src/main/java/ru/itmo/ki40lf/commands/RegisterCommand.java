@@ -23,11 +23,20 @@ public class RegisterCommand extends Command {
             return "Логин и пароль не могут быть пустыми.";
         }
 
+        if (userManager.isLoggedIn(login) && userManager.isPasswordUsed(password)) {
+            return "Вы уже вошли в систему";
+        }
+
         try {
-            boolean success = userManager.registerUser(login, password);
-            return success
-                    ? "Регистрация успешна."
-                    : "Пользователь с таким логином уже существует.";
+            if (userManager.registerUser(login, password)) {
+                userManager.setLoggedInUser(login);
+                userManager.setPasswordUsed(password);
+                return "Регистрация прошла успешно!";
+            } else {
+                userManager.removeLoggedInUser(login);
+                userManager.removePasswordUsed(password);
+                return "Такой пользователь уже существует!";
+            }
         } catch (IOException e) {
             return "Ошибка при сохранении пользователя: " + e.getMessage();
         }

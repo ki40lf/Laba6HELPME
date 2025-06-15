@@ -105,7 +105,7 @@ public class Server {
                                         response = new Response("Неизвестная команда: " + message);
                                     } else if (command.needsAuthorization() && request.getCredentials().getLogin() == null) {
                                         response = new Response("Ошибка: требуется авторизация.", false);
-                                    } else if ((result = command.execute(request)).equals("Неверный логин или пароль")) {
+                                    } else if ((result = command.execute(request)).equals("Неверный логин или пароль") || result.equals("Такой пользователь уже существует!") ) {
                                         response = new Response(result, false);
                                     } else {
                                         user.set(request.getLogin());
@@ -131,6 +131,7 @@ public class Server {
 
                     } catch (IOException e) {
                         System.out.println("Ошибка чтения от клиента: " + e.getMessage());
+                        break;
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
