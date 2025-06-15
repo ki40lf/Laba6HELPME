@@ -1,4 +1,3 @@
-// Server.java (обновлённый с поддержкой Java 8, многопоточностью и сохранением пользователей)
 package ru.itmo.ki40lf;
 
 import ru.itmo.ki40lf.common.Request;
@@ -14,7 +13,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Server {
@@ -54,7 +52,7 @@ public class Server {
         try (
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
-        ) { AtomicBoolean success = new AtomicBoolean(false);
+        ) {
             while (true) {
                 //requestReadPool.submit(() -> {
                     try {
@@ -74,44 +72,21 @@ public class Server {
                                 Response response;
 
                                 String message = request.getMessage();
-//                                if ("register".equals(message)) {
-//                                    if (success.get()) {
-//                                        response = new Response("Вы уже вошли в аккаунт", true);
-//                                    } else {
-//                                    boolean ok = ServerEnvironment.getInstance().getUserManager()
-//                                            .registerUser(request.getLogin(), request.getPasswordHash());
-//                                    result = ok ? "Регистрация прошла успешно!" : "Такой пользователь уже существует!";
-//                                    response = new Response(result, ok);
-//                                    success.set(ok);
-//                                    }
-//
-//                                } else if ("login".equals(message)) {
-//                                    if (success.get()) {
-//                                        response = new Response("Вы уже вошли в аккаунт", true);
-//                                    } else {
-//                                        boolean ok = ServerEnvironment.getInstance().getUserManager()
-//                                                .authenticate(request.getLogin(), request.getPasswordHash());
-//                                        result = ok ? "Вход выполнен: " + request.getLogin()
-//                                                : "Неверный логин или пароль.";
-//                                        response = new Response(result, ok);
-//                                        success.set(ok);
-//                                    }
-//
-//                                } else {
-                                    CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
-                                    Command command = commandManager.getCommand(message);
 
-                                    if (command == null) {
-                                        response = new Response("Неизвестная команда: " + message);
-                                    } else if (command.needsAuthorization() && request.getCredentials().getLogin() == null) {
-                                        response = new Response("Ошибка: требуется авторизация.", false);
-                                    } else if ((result = command.execute(request)).equals("Неверный логин или пароль") || result.equals("Такой пользователь уже существует!") ) {
-                                        response = new Response(result, false);
-                                    } else {
-                                        user.set(request.getLogin());
-                                        response = new Response(result);
-                                    }
-                                //}
+                                CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
+                                Command command = commandManager.getCommand(message);
+
+                                if (command == null) {
+                                    response = new Response("Неизвестная команда: " + message);
+                                } else if (command.needsAuthorization() && request.getCredentials().getLogin() == null) {
+                                    response = new Response("Ошибка: требуется авторизация.", false);
+                                } else if ((result = command.execute(request)).equals("Неверный логин или пароль") || result.equals("Такой пользователь уже существует!") ) {
+                                    response = new Response(result, false);
+                                } else {
+                                    user.set(request.getLogin());
+                                    response = new Response(result);
+                                }
+
 
                                 final String finalResult = result;
                                 responseSendPool.submit(() -> {
@@ -150,6 +125,4 @@ public class Server {
             }
         }
     }
-} // Совместим с Java 8
-
-
+}

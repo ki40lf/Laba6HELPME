@@ -46,9 +46,7 @@ public class ExecuteScript {
                 Request request = null;
                 Dragon dragon = null;
                 FormDragons dragonGenerator = new FormDragons();
-                boolean success = false;
 
-                // Парсим команду
                 String[] commandLine = line.trim().split("\\s+");
                 String command = commandLine[0];
                 String[] arguments = Arrays.copyOfRange(commandLine, 1, commandLine.length);
@@ -80,20 +78,16 @@ public class ExecuteScript {
                             break;
                     }}
 
-
-                    // Формируем запрос
-                request = new Request(command, arguments, dragon, currentLogin, currentPassword); //ЧЕ ЗА КАЛЛ
+                request = new Request(command, arguments, dragon, currentLogin, currentPassword);
 
 
                 try (Socket socket = new Socket("localhost", 12345);
                      ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
                      ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
 
-                    // Отправляем объект Request
                     outputStream.writeObject(request);
                     outputStream.flush();
 
-                    // Читаем ответ от сервера
                     Response response = (Response) inputStream.readObject();
                     if (response.getMessage() != null) {
                         System.out.println("Ответ от сервера: " + response.getMessage());

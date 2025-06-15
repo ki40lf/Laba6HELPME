@@ -42,37 +42,7 @@ public class Client {
         FormDragons dragonGenerator = new FormDragons();
         boolean success = false;
 
-//        while (true) {
-//            String[] line = scanner.nextLine().trim().split("\\s+");
-//            if (line.length==0) continue;
-//            if (line[0].equals("register") || line[0].equals("login")) {
-//                // запрос логина/пароля
-//                System.out.print("Логин: ");
-//                String login = scanner.nextLine().trim();
-//                System.out.print("Пароль: ");
-//                String password = scanner.nextLine();
-//                String hashPassword = password; // передадим открытым, хэш сделает сервер
-//                try {
-//                    Request request = new Request(line[0], new String[0], null, login, hashPassword);
-//                    outputStream.writeObject(request); outputStream.flush();
-//                    Response response = (Response) inputStream.readObject();
-//                    System.out.println(response.getMessage());
-//                    if (response.isSuccess()) {
-//                        currentLogin = login;
-//                        currentPassword = hashPassword;
-//                        break;  // на авто-вход или регистрация
-//                    }
-//                } catch (Exception e) {
-//                    System.out.println("Ошибка: "+e.getMessage());
-//                }
-//            } else {
-//                System.out.println("Сначала выполните register или login");
-//            }
-//        }
-
-        //
-
-        System.out.println("Добро пожаловать! Для начало зарегистрируйтесь (register) или войдите в аккаунт (login)!");
+        System.out.println("Добро пожаловать! Для начала зарегистрируйтесь (register) или войдите в аккаунт (login)!");
 
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
@@ -122,12 +92,9 @@ public class Client {
 
                 request = new Request(command, arguments, dragon, currentLogin, currentPassword);
                 try  {
-
-                    // Отправляем объект Request
                     outputStream.writeObject(request);
                     outputStream.flush();
 
-                    // Читаем ответ от сервера
                     Response response = (Response) inputStream.readObject();
                     success = response.isSuccess();
                     if (!success) {
