@@ -13,8 +13,9 @@ import ru.itmo.ki40lf.userManager.UserManager;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.RemoteException;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Server {
     private static final int PORT = 12345;
@@ -49,10 +50,11 @@ public class Server {
     }
 
     private static void handleClient(Socket clientSocket) {
+        AtomicReference<String> user = new AtomicReference<>();
         try (
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
-        ) {
+        ) { AtomicBoolean success = new AtomicBoolean(false);
             while (true) {
                 //requestReadPool.submit(() -> {
                     try {
@@ -60,6 +62,7 @@ public class Server {
                         if (!(received instanceof Request)) {
                             System.out.println("Некорректный объект от клиента.");
                             clientSocket.close();
+                            ServerEnvironment.getInstance().getUserManager().removeLoggedInUser(String.valueOf(user));
                             return;
                         }
                         Request request = (Request) received;
@@ -71,36 +74,44 @@ public class Server {
                                 Response response;
 
                                 String message = request.getMessage();
-                                if ("register".equals(message)) {
-                                    if (request.getLogin() != null) {
-                                        response = new Response("Вы уже вошли в аккаунт", true);
-                                    } else {
-                                    boolean ok = ServerEnvironment.getInstance().getUserManager()
-                                            .registerUser(request.getLogin(), request.getPasswordHash());
-                                    result = ok ? "Регистрация прошла успешно!" : "Такой пользователь уже существует!";
-                                    response = new Response(result, ok);
-                                    }
-
-                                } else if ("login".equals(message)) {
-                                    boolean ok = ServerEnvironment.getInstance().getUserManager()
-                                            .authenticate(request.getLogin(), request.getPasswordHash());
-                                    result = ok ? "Вход выполнен: " + request.getLogin()
-                                            : "Неверный логин или пароль.";
-                                    response = new Response(result, ok);
-
-                                } else {
+//                                if ("register".equals(message)) {
+//                                    if (success.get()) {
+//                                        response = new Response("Вы уже вошли в аккаунт", true);
+//                                    } else {
+//                                    boolean ok = ServerEnvironment.getInstance().getUserManager()
+//                                            .registerUser(request.getLogin(), request.getPasswordHash());
+//                                    result = ok ? "Регистрация прошла успешно!" : "Такой пользователь уже существует!";
+//                                    response = new Response(result, ok);
+//                                    success.set(ok);
+//                                    }
+//
+//                                } else if ("login".equals(message)) {
+//                                    if (success.get()) {
+//                                        response = new Response("Вы уже вошли в аккаунт", true);
+//                                    } else {
+//                                        boolean ok = ServerEnvironment.getInstance().getUserManager()
+//                                                .authenticate(request.getLogin(), request.getPasswordHash());
+//                                        result = ok ? "Вход выполнен: " + request.getLogin()
+//                                                : "Неверный логин или пароль.";
+//                                        response = new Response(result, ok);
+//                                        success.set(ok);
+//                                    }
+//
+//                                } else {
                                     CommandManager commandManager = ServerEnvironment.getInstance().getCommandManager();
                                     Command command = commandManager.getCommand(message);
 
                                     if (command == null) {
                                         response = new Response("Неизвестная команда: " + message);
                                     } else if (command.needsAuthorization() && request.getCredentials().getLogin() == null) {
-                                        response = new Response("Ошибка: требуется авторизация.");
+                                        response = new Response("Ошибка: требуется авторизация.", false);
+                                    } else if ((result = command.execute(request)).equals("Неверный логин или пароль")) {
+                                        response = new Response(result, false);
                                     } else {
-                                        result = command.execute(request);
+                                        user.set(request.getLogin());
                                         response = new Response(result);
                                     }
-                                }
+                                //}
 
                                 final String finalResult = result;
                                 responseSendPool.submit(() -> {
@@ -131,6 +142,7 @@ public class Server {
             try {
                 ServerEnvironment.getInstance().getUserManager().saveUsers("users.csv");
                 clientSocket.close();
+                ServerEnvironment.getInstance().getUserManager().removeLoggedInUser(String.valueOf(user));
                 System.out.println("Соединение с клиентом закрыто.");
             } catch (IOException e) {
                 e.printStackTrace();

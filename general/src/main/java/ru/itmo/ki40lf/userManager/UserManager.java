@@ -9,10 +9,15 @@ import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class UserManager {
     private final Map<String, String> users = new HashMap<>();
+    private final Set<String> loggedInUsers = new HashSet<>();
+    private final Set<String> loggedInPasswords = new HashSet<>();
+
     private final Path userFile = Paths.get("users.csv");
     private final MessageDigest digest;
 
@@ -79,6 +84,34 @@ public class UserManager {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    public synchronized boolean isLoggedIn(String login) {
+        return loggedInUsers.contains(login);
+    }
+
+    public synchronized boolean isPasswordUsed(String password) {
+        return loggedInPasswords.contains(password);
+    }
+
+    public synchronized void setLoggedInUser(String login) {
+        loggedInUsers.add(login);
+    }
+
+    public synchronized void setPasswordUsed(String password) {
+        loggedInPasswords.add(password);
+    }
+
+    public synchronized void removeLoggedInUser(String login) {
+        loggedInUsers.remove(login);
+    }
+
+    public synchronized void removePasswordUsed(String password) {
+        loggedInPasswords.remove(password);
+    }
+
+    public synchronized Map<String, String> getUsers() {
+        return users;
     }
 }
 

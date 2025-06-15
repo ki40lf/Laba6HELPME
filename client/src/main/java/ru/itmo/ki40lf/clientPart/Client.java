@@ -40,41 +40,39 @@ public class Client {
         connect();
         Scanner scanner = new Scanner(System.in);
         FormDragons dragonGenerator = new FormDragons();
+        boolean success = false;
 
-        //new
-        System.out.println("Введите register или login:");
-
-        while (true) {
-            String[] line = scanner.nextLine().trim().split("\\s+");
-            if (line.length==0) continue;
-            if (line[0].equals("register") || line[0].equals("login")) {
-                // запрос логина/пароля
-                System.out.print("Логин: ");
-                String login = scanner.nextLine().trim();
-                System.out.print("Пароль: ");
-                String password = scanner.nextLine();
-                String hashPassword = password; // передадим открытым, хэш сделает сервер
-                try {
-                    Request request = new Request(line[0], new String[0], null, login, hashPassword);
-                    outputStream.writeObject(request); outputStream.flush();
-                    Response response = (Response) inputStream.readObject();
-                    System.out.println(response.getMessage());
-                    if (response.isSuccess()) {
-                        currentLogin = login;
-                        currentPassword = hashPassword;
-                        break;  // на авто-вход или регистрация
-                    }
-                } catch (Exception e) {
-                    System.out.println("Ошибка: "+e.getMessage());
-                }
-            } else {
-                System.out.println("Сначала выполните register или login");
-            }
-        }
+//        while (true) {
+//            String[] line = scanner.nextLine().trim().split("\\s+");
+//            if (line.length==0) continue;
+//            if (line[0].equals("register") || line[0].equals("login")) {
+//                // запрос логина/пароля
+//                System.out.print("Логин: ");
+//                String login = scanner.nextLine().trim();
+//                System.out.print("Пароль: ");
+//                String password = scanner.nextLine();
+//                String hashPassword = password; // передадим открытым, хэш сделает сервер
+//                try {
+//                    Request request = new Request(line[0], new String[0], null, login, hashPassword);
+//                    outputStream.writeObject(request); outputStream.flush();
+//                    Response response = (Response) inputStream.readObject();
+//                    System.out.println(response.getMessage());
+//                    if (response.isSuccess()) {
+//                        currentLogin = login;
+//                        currentPassword = hashPassword;
+//                        break;  // на авто-вход или регистрация
+//                    }
+//                } catch (Exception e) {
+//                    System.out.println("Ошибка: "+e.getMessage());
+//                }
+//            } else {
+//                System.out.println("Сначала выполните register или login");
+//            }
+//        }
 
         //
 
-        System.out.println("Добро пожаловать! Введите команду (или введите help для списка команд)");
+        System.out.println("Добро пожаловать! Для начало зарегистрируйтесь (register) или войдите в аккаунт (login)!");
 
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
@@ -88,6 +86,15 @@ public class Client {
 
             if (!command.isEmpty()) {
                 switch (command) {
+                    case "register":
+                    case "login":
+//                        if(!success) {
+                            System.out.print("Введите логин: ");
+                            currentLogin = scanner.nextLine().trim();
+                            System.out.print("Введите пароль: ");
+                            currentPassword = scanner.nextLine();
+                        //}
+                        break;
                     case "exit":
                         System.out.println("Хорошего дня! ♡ (*^w^)");
                         disconnect();
@@ -122,6 +129,12 @@ public class Client {
 
                     // Читаем ответ от сервера
                     Response response = (Response) inputStream.readObject();
+                    success = response.isSuccess();
+                    if (!success) {
+                        currentLogin = null;
+                        currentPassword = null;
+                    }
+
                     if (response.getMessage() != null) {
                         System.out.println("Ответ от сервера: " + response.getMessage());
                     }

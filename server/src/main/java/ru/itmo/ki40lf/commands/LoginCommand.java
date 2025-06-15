@@ -16,10 +16,18 @@ public class LoginCommand extends Command {
     public String execute(Request request) {
         String login = request.getCredentials().getLogin();
         String password = request.getCredentials().getPassword();
+
+        if (userManager.isLoggedIn(login) && userManager.isPasswordUsed(password)) {
+            return "Вы уже вошли в систему";
+        }
         if (userManager.authenticate(login, password)) {
+            userManager.setLoggedInUser(login);
+            userManager.setPasswordUsed(password);
             return "Успешный вход в систему как: " + login;
         } else {
-            return "Неверный логин или пароль.";
+            userManager.removeLoggedInUser(login);
+            userManager.removePasswordUsed(password);
+            return "Неверный логин или пароль";
         }
     }
 
