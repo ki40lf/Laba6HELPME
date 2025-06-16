@@ -12,9 +12,10 @@ public class SaveCommand extends Command {
 
     @Override
     public String execute(Request request) {
-        List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
-        ServerEnvironment.getInstance().getFileManager().writeToCSV(dragons);
-        return "Драконы успешно записаны в файл!";
+        //List<Dragon> dragons = ServerEnvironment.getInstance().getCollectionManager().getDragons();
+        //ServerEnvironment.getInstance().getFileManager().writeToCSV(dragons);
+        //return "Драконы успешно записаны в файл!";
+        return null;//"Сохранение коллекции не доступно с клиента";
     }
 
     @Override

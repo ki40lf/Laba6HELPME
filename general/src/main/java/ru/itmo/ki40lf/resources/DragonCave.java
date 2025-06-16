@@ -1,9 +1,11 @@
 package ru.itmo.ki40lf.resources;
 
+import java.io.Serializable;
+
 /**
  * Класс Пещер
  */
-public class DragonCave {
+public class DragonCave implements Serializable {
     /** Поле глубины */
     private double depth;
     /** Поле количества сокровищ */

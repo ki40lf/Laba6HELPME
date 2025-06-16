@@ -1,5 +1,11 @@
 package ru.itmo.ki40lf.commands;
 import ru.itmo.ki40lf.common.Request;
+import ru.itmo.ki40lf.resources.Dragon;
+import ru.itmo.ki40lf.resources.IdGen;
+import ru.itmo.ki40lf.serverPart.ServerEnvironment;
+
+import java.util.List;
+
 public class AddCommand extends Command {
     public AddCommand() {
         super("add");
@@ -8,8 +14,11 @@ public class AddCommand extends Command {
 
     @Override
     public String execute(Request request) {
-        //Пока что хуй знает как сделать
-        return "";
+        Dragon dragon1 = request.getDragon();
+        dragon1.setId(IdGen.regenId());
+        dragon1.setOwner(request.getCredentials().getLogin());
+        ServerEnvironment.getInstance().getCollectionManager().getDragons().add(dragon1);
+        return "Дракон успешно добавлен";
     }
 
     @Override

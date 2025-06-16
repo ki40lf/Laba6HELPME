@@ -1,0 +1,11 @@
+ru\itmo\ki40lf\common\Response.class
+ru\itmo\ki40lf\resources\DragonCharacter.class
+ru\itmo\ki40lf\resources\DragonType.class
+ru\itmo\ki40lf\resources\Dragon.class
+ru\itmo\ki40lf\common\Request.class
+ru\itmo\ki40lf\resources\FormDragons.class
+ru\itmo\ki40lf\resources\Color.class
+ru\itmo\ki40lf\App.class
+ru\itmo\ki40lf\resources\Coordinates.class
+ru\itmo\ki40lf\resources\DragonCave.class
+ru\itmo\ki40lf\resources\IdGen.class

@@ -3,14 +3,17 @@ import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.common.Response;
 
 import ru.itmo.ki40lf.commands.*;
+import ru.itmo.ki40lf.userManager.UserManager;
 
 import java.util.HashMap;
 
 public class CommandManager {
     public static HashMap<String, Command> commandList;
 
-    public CommandManager() {
+    public CommandManager(UserManager userManager) {
         commandList = new HashMap<>();
+        commandList.put("register", new RegisterCommand(userManager));
+        commandList.put("login", new LoginCommand(userManager));
         commandList.put("add", new AddCommand());
         commandList.put("clear", new ClearCommand());
         commandList.put("help", new HelpCommand());
@@ -25,6 +28,7 @@ public class CommandManager {
         commandList.put("save", new SaveCommand());
         commandList.put("show", new ShowCommand());
         commandList.put("update_id", new UpdateIdCommand());
+        commandList.put("execute_script", new ExecuteScriptFakeCommand());
     }
 
     public HashMap<String, Command> getCommandList() {
@@ -33,12 +37,16 @@ public class CommandManager {
 
     public String startExecuting(Request request) {
         String commandName = request.getMessage();
+        System.out.println("Executing command: " + commandName);
         if (commandList.containsKey(commandName)) {
             Command command = commandList.get(commandName);
             String message = command.execute(request);
             return message;
         } else {
-            return "Command doesn't exist";
+            return "Команда не найдена";
         }
+    }
+    public Command getCommand(String name) {
+        return commandList.get(name);
     }
 }

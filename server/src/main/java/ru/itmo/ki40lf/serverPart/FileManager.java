@@ -20,14 +20,13 @@ public class FileManager {
     // Чтение из CSV файла
     public List<Dragon> readFromCSV() {
         List<Dragon> dragons = new ArrayList<>();
-        try (CSVReader reader = new CSVReader(new FileReader("D:/ITMO/dragons.csv"))) {
+        try (CSVReader reader = new CSVReader(new FileReader("C:/Users/lubst/dragons.csv"))) {
 
             String[] nextLine;
             reader.readNext();
             while ((nextLine = reader.readNext()) != null) {
-                // Предполагается, что порядок колонок соответствует полям Dragon
-                Dragon dragon = new Dragon(
-                        Integer.parseInt(nextLine[0]),
+                Dragon dragon = new Dragon( //здесь для констр для овнера
+                        IdGen.registerId(Integer.parseInt(nextLine[0])),
                         nextLine[1],
                         new Coordinates(Float.parseFloat(nextLine[2]), Double.parseDouble(nextLine[3])),
                         ZonedDateTime.parse(nextLine[4], DateTimeFormatter.ISO_ZONED_DATE_TIME),
@@ -37,9 +36,10 @@ public class FileManager {
                         DragonCharacter.valueOf(nextLine[8]),
                         new DragonCave(
                                 Double.parseDouble(nextLine[9]),    // Depth
-                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[10])
-                        )
-
+                                nextLine[10].equals("null") ? null : Float.parseFloat(nextLine[9])
+                        ),
+                        //owner
+                        nextLine[11]
 
                 );
                 dragons.add(dragon);

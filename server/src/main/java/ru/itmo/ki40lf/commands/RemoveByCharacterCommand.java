@@ -2,8 +2,10 @@ package ru.itmo.ki40lf.commands;
 import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.resources.Dragon;
 import ru.itmo.ki40lf.resources.DragonCharacter;
+import ru.itmo.ki40lf.resources.IdGen;
 import ru.itmo.ki40lf.serverPart.ServerEnvironment;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class RemoveByCharacterCommand extends Command {
@@ -18,23 +20,45 @@ public class RemoveByCharacterCommand extends Command {
             return "Коллекция пуста! Попробуйте другую команду";
         }
 
+        if (request.getArgs().length == 0){
+            return "Вы не ввели характер дракона";
+        }
+
         DragonCharacter finalCharacter;
-        while (true) {
-            try {
-                finalCharacter = DragonCharacter.valueOf(request.getArgs()[0]);
-                break;
-            } catch (IllegalArgumentException e) {
-                System.err.println("Ошибка: Неверный ввод. Попробуйте снова.");
+        try {
+            finalCharacter = DragonCharacter.valueOf(request.getArgs()[0]);
+        } catch (IllegalArgumentException e) {
+            return "Такого характера нет, попробуйте снова";
+        }
+
+        boolean removed = false;
+        String currentUser = request.getCredentials().getLogin();
+
+        // Удаляем только драконов с нужным характером И текущим владельцем
+//        boolean removed = dragons.removeIf(dragon ->
+//                dragon.getCharacter() == finalCharacter &&
+//                        dragon.getOwner() != null &&
+//                        dragon.getOwner().equals(currentUser)
+//        );
+
+        Iterator<Dragon> iterator = dragons.iterator();
+        while (iterator.hasNext()) {
+            Dragon dragon = iterator.next();
+            if (
+                    dragon.getCharacter().equals(finalCharacter) &&
+                            dragon.getOwner() != null &&
+                            dragon.getOwner().equals(currentUser)
+            ) {
+                iterator.remove();
+                IdGen.releaseId(dragon.getId());
+                removed = true;
             }
         }
 
-        DragonCharacter finalCharacter1 = finalCharacter;
-        boolean removed = dragons.removeIf(dragon -> dragon.getCharacter() == finalCharacter1);
-
         if (removed) {
-            return "Драконы с характером " + finalCharacter.toString() + " успешно удалены.";
+            return "Ваши драконы с характером " + finalCharacter + " успешно удалены.";
         } else {
-            return "Драконов с характером " + finalCharacter.toString() + " не найдено.";
+            return "Драконов с таким характером, принадлежащих вам, не найдено.";
         }
     }
 

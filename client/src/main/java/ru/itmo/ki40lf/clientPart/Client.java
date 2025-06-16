@@ -1,153 +1,115 @@
 package ru.itmo.ki40lf.clientPart;
-
 import ru.itmo.ki40lf.common.Request;
 import ru.itmo.ki40lf.common.Response;
-import ru.itmo.ki40lf.resources.Coordinates;
 import ru.itmo.ki40lf.resources.Dragon;
 import ru.itmo.ki40lf.resources.FormDragons;
 
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-    private SocketChannel channel;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
-    private final String host = "localhost";
-    private final int port = 12345;
+    private static Socket socket;
+    private static ObjectOutputStream outputStream;
+    private static ObjectInputStream inputStream;
+    //new
+    private String currentLogin = null;
+    private String currentPassword = null;
 
-    /**
-     * Метод для запуска клиента и обработки команд
-     */
+    public void connect() {
+        try {
+            socket = new Socket("localhost", 12345);
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
+            outputStream.flush();
+            inputStream = new ObjectInputStream(socket.getInputStream());
+            System.out.println("Подключение установлено с сервером.");
+        } catch (IOException e) {
+            System.out.println("Ошибка подключения: " + e.getMessage());
+        }
+    }
+    public void disconnect() {
+        try {
+            if (socket != null) socket.close();
+            if (outputStream != null) outputStream.close();
+            if (inputStream != null) inputStream.close();
+        } catch (IOException e) {
+            System.out.println("Ошибка при закрытии соединения.");
+        }
+    }
     public void run() {
         connect();
         Scanner scanner = new Scanner(System.in);
         FormDragons dragonGenerator = new FormDragons();
-        System.out.println("Добро пожаловать! Введите команду (или введите help для списка команд)");
+        boolean success = false;
+
+        System.out.println("Добро пожаловать! Для начала зарегистрируйтесь (register) или войдите в аккаунт (login)!");
 
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
             String[] commandLine = input.trim().split("\\s+");
-            String[] arguments = Arrays.copyOfRange(commandLine, 1, commandLine.length);
-
+            String[] arguments = new String[commandLine.length - 1];
+            System.arraycopy(commandLine, 1, arguments, 0, arguments.length);
+            //System.out.println(arguments.toString());
             String command = commandLine[0];
             Request request = null;
             Dragon dragon = null;
 
             if (!command.isEmpty()) {
                 switch (command) {
-                    case "exit":
-                        disconnect();
-                        System.exit(1);
+                    case "register":
+                    case "login":
+//                        if(!success) {
+                            System.out.print("Введите логин: ");
+                            currentLogin = scanner.nextLine().trim();
+                            System.out.print("Введите пароль: ");
+                            currentPassword = scanner.nextLine();
+                        //}
                         break;
-
+                    case "exit":
+                        System.out.println("Хорошего дня! ♡ (*^w^)");
+                        disconnect();
+                        return;
                     case "save":
                         System.out.println("Сохранение коллекции не доступно с клиента");
-                        continue;
-
-                    case "update_id":
-                        if (arguments.length > 0) {
-                            long id = Long.parseLong(arguments[0]);
-                            dragon = dragonGenerator.createDragon(id);
-                        } else {
-                            System.out.println("ID не передан для обновления");
-                            continue;
-                        }
                         break;
-
-                    case "insert":
+                    case "update_id":
                         dragon = dragonGenerator.createDragon();
                         break;
-
+                    case "add": //переделываю
+                        dragon = dragonGenerator.createDragon();
+                        break;
+                    case "execute_script":
+                        if (arguments.length != 0) {
+                            ExecuteScript.executeScript(arguments[0], currentLogin, currentPassword);
+                            ExecuteScript.getUsedFiles().clear();
+                        } else {
+                            System.out.println("Что-то не так с аргументами");
+                        }
+                        break;
                     default:
                         break;
                 }
 
-                request = new Request(input, arguments, dragon);
+                request = new Request(command, arguments, dragon, currentLogin, currentPassword);
+                try  {
+                    outputStream.writeObject(request);
+                    outputStream.flush();
 
-                try {
-                    sendRequest(request);
+                    Response response = (Response) inputStream.readObject();
+                    success = response.isSuccess();
+                    if (!success) {
+                        currentLogin = null;
+                        currentPassword = null;
+                    }
+
+                    if (response.getMessage() != null) {
+                        System.out.println("Ответ от сервера: " + response.getMessage());
+                    }
+
                 } catch (IOException | ClassNotFoundException e) {
-                    System.out.println("Ошибка при отправке запроса: " + e.getMessage());
+                    System.out.println("Ошибка на сервере: " + e.getMessage());
                 }
             }
         }
-    }
-
-    /**
-     * Метод для подключения к серверу
-     */
-    public void connect() {
-        try {
-            if (channel == null || !channel.isConnected()) {
-                channel = SocketChannel.open();
-                channel.connect(new InetSocketAddress(host, port));
-                System.out.println("Подключение установлено с сервером " + host + ":" + port);
-
-                //Потоки создаются только при первом успешном соединении
-                if (out == null && in == null) {
-                    out = new ObjectOutputStream(channel.socket().getOutputStream());
-                    out.flush();
-                    in = new ObjectInputStream(channel.socket().getInputStream());
-                    System.out.println("Потоки ввода-вывода настроены");
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Ошибка подключения: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Метод для отправки запроса на сервер и получения ответа
-     */
-    public void sendRequest(Request request) throws IOException, ClassNotFoundException {
-        if (channel == null || !channel.isConnected()) {
-            System.out.println( "Нет подключения к серверу, попытка подключения...");
-            connect();
-        }
-
-        if (out != null) {
-            out.writeObject(request);
-            out.flush();
-            System.out.println("Запрос отправлен на сервер: " + request.getMessage());
-
-            // Чтение объекта-ответа
-            Object responseObject = in.readObject();
-            if (responseObject instanceof Response) {
-                Response response = (Response) responseObject;
-                System.out.println("Ответ от сервера: " + response.getMessage());
-            } else {
-                System.out.println("Получен неизвестный ответ от сервера.");
-            }
-        } else {
-            System.out.println("Поток вывода не инициализирован!");
-        }
-    }
-
-    /**
-     * Метод для отключения от сервера
-     */
-    public void disconnect() {
-        try {
-            if (channel != null && channel.isOpen()) {
-                channel.close();
-                System.out.println("Соединение закрыто.");
-            }
-        } catch (IOException e) {
-            System.out.println("Ошибка при закрытии подключения: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Точка входа в программу
-     */
-    public static void main(String[] args) {
-        Client client = new Client();
-        client.run();
     }
 }
