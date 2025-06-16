@@ -11,7 +11,6 @@ public class PasswordHasher {
         try {
             MessageDigest md = MessageDigest.getInstance(ALGORITHM);
             byte[] hashBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
-            // Преобразуем байты в шестнадцатеричную строку
             StringBuilder sb = new StringBuilder();
             for (byte b : hashBytes) {
                 sb.append(String.format("%02x", b));
