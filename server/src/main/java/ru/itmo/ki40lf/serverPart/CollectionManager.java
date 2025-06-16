@@ -1,7 +1,6 @@
 package ru.itmo.ki40lf.serverPart;
 
 import ru.itmo.ki40lf.resources.Dragon;
-import ru.itmo.ki40lf.resources.IdGen;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -24,7 +23,7 @@ public class CollectionManager {
 
     private ZonedDateTime initializationTime;
 
-    public CollectionManager(List<Dragon> dragons) {
+    public CollectionManager() {
         this.initializationTime = ZonedDateTime.now();
     }
 
